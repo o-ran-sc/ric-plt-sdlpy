@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fcb48d4d_d6b70b38",
+        "filename": "sdl/exceptions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T13:52:29Z",
+      "side": 1,
+      "message": "having too many custom exceptions makes handling on the client side more painful.. not sure we need this in addition to BackendError. Maybe give a reason when raising BackendError\n\nalso consider merging OperationInterrupted into that\n\nBasically, if the handling by the client is supposed to be the same in all backend cases (retry?) then they should be one exception",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f839e78_29ab7897",
+        "filename": "sdl/exceptions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T13:52:29Z",
+      "side": 1,
+      "message": "what are the causes of this exception, given the ones above?",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
