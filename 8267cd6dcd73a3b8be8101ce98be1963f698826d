@@ -33,6 +33,108 @@
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6022ab75_a784ca2a",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T14:00:40Z",
+      "side": 1,
+      "message": "just a question here: is this intended to be called by users before executing operations like find_and_get, or is this going to be used internally by operations to achieve atomicity?",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5af413a_b810abdf",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T14:00:40Z",
+      "side": 1,
+      "message": "why a different return type for set than set_if and the others? I would also return \"True\" here just for consistency.",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c28d156d_e478bf50",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T14:00:40Z",
+      "side": 1,
+      "message": "would be nice to also accept a single string here rather than making client form a set of one item, but not a big deal",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22ca6cfc_1b489908",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T14:00:40Z",
+      "side": 1,
+      "message": "some grammar issues here",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4423a49_ef9b6772",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T14:00:40Z",
+      "side": 1,
+      "message": "why not use \"delete\" to be consistent with \"CRUD\"  terminology?",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e94c6a0_7f669cd6",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-08T14:00:40Z",
+      "side": 1,
+      "message": "can you please elaborate on what a member is and what a group is?",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
