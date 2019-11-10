@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "25eb9330_71597f9b",
+        "filename": "sdl/exceptions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "Thanks Tommy. OK, I removed couple of exceptions (see patchset 3) and updated remaining exception\u0027s description to state if retry is worth to try or not after an exception has been catched.",
+      "parentUuid": "fcb48d4d_d6b70b38",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f839e78_29ab7897",
         "filename": "sdl/exceptions.py",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-08T13:52:29Z",
       "side": 1,
       "message": "what are the causes of this exception, given the ones above?",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cf21d1b_70b117a8",
+        "filename": "sdl/exceptions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "Maybe there are no use case for it. Removed RejectedBySdl exception (see patchset 3).",
+      "parentUuid": "2f839e78_29ab7897",
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "6c00abfc_5e58dc37",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "We are going to use Redis modules to implemented find_and_get(), it will be an atomic operation.\nSyncLockAbc provides a public locking service for clients if they need a locking service to coordinate usage of some shared instance.",
+      "parentUuid": "6022ab75_a784ca2a",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5af413a_b810abdf",
         "filename": "sdl/syncstorage_abc.py",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2019-11-08T14:00:40Z",
       "side": 1,
       "message": "why a different return type for set than set_if and the others? I would also return \"True\" here just for consistency.",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68ff8115_c274169b",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "Set_if() and set_if_not_exists() functions can return True/False, False is returned if value is not set to db.\nIf Set() return type would be bool it would return anyhow always value True, never False, hence I selected return type None.",
+      "parentUuid": "f5af413a_b810abdf",
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "610284b3_b8489ba6",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "OK, good idea. I changed the API to accept a string or set of strings. Similar change was done to remove(), add_member(), remove_member() function APIs. See patchset 2,3.",
+      "parentUuid": "c28d156d_e478bf50",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "22ca6cfc_1b489908",
         "filename": "sdl/syncstorage_abc.py",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2019-11-08T14:00:40Z",
       "side": 1,
       "message": "some grammar issues here",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17d8d839_19c02891",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "Updated the text, not sure did I fix the issue. See patchset 2,3.",
+      "parentUuid": "22ca6cfc_1b489908",
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "faff0b0a_1f688952",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "We have C++ and Golang SDL libraries and both of these already existing libraries we have used \"remove\", that\u0027s I think it would be better to use the same naming here also with python.",
+      "parentUuid": "d4423a49_ef9b6772",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e94c6a0_7f669cd6",
         "filename": "sdl/syncstorage_abc.py",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2019-11-08T14:00:40Z",
       "side": 1,
       "message": "can you please elaborate on what a member is and what a group is?",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dba2af4_352195a4",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-11-10T22:39:01Z",
+      "side": 1,
+      "message": "A group and a member concept are the same as Redis Sets concept (SADD, SREM commands...). Should I add more explanation about group and member to the text below (line 453-\u003e)?",
+      "parentUuid": "0e94c6a0_7f669cd6",
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
