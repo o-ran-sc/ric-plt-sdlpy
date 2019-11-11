@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7bf5009e_7318e2b1",
+        "filename": "sdl/exceptions.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:25:43Z",
+      "side": 1,
+      "message": "please see prior comment; it may make sense to even further combine these, your call on that\nbut the client is essentially advised to retry later in this and the above, and since the handling is the same, maybe the exception should be",
+      "revId": "2d7b21f143fed0ff8f8a30156ba2a065b7bf90c7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
