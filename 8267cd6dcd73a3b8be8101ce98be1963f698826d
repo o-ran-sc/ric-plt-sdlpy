@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9db049bb_498e7fac",
+        "filename": "sdl/exceptions.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:23:38Z",
+      "side": 1,
+      "message": "ill look right now\n\nin general i think you need two basic exceptions ala http 4xx and 5xx: \"client\u0027s fault\" and \"my (SDL) fault\". The client handling for the last case is probably the same no matter what the went wrong; the client can only retry later, or just give up and let k8s respin. I think having fine grained exceptions for the \"client\u0027s fault\" is ok since that tells the client exactly what to fix (e.g., type error is fine).",
+      "parentUuid": "25eb9330_71597f9b",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f839e78_29ab7897",
         "filename": "sdl/exceptions.py",
         "patchSetId": 1
