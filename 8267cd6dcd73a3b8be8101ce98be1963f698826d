@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "278a0712_df8c9dec",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:21:09Z",
+      "side": 1,
+      "message": "I think maybe some text over when the client should use locks would be helpful here then.\n\nFor example A1 uses threads, do I acquire the lock *before* a find_and_get and then release it *after*, for example? \n\nthis may belong in the README rather than a code comment; I\u0027d suggest writing a blurb about this for the readme.",
+      "parentUuid": "6c00abfc_5e58dc37",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5af413a_b810abdf",
         "filename": "sdl/syncstorage_abc.py",
         "patchSetId": 1
@@ -139,6 +157,24 @@
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfaaf503_7a356435",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:21:09Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "68ff8115_c274169b",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     },
     {
       "key": {
@@ -177,6 +213,24 @@
     },
     {
       "key": {
+        "uuid": "f34d5c3e_d96c8e23",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:21:09Z",
+      "side": 1,
+      "message": "thanks",
+      "parentUuid": "610284b3_b8489ba6",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22ca6cfc_1b489908",
         "filename": "sdl/syncstorage_abc.py",
         "patchSetId": 1
@@ -209,6 +263,24 @@
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0fb11b0_c0fa53cf",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:21:09Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "17d8d839_19c02891",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
     },
     {
       "key": {
@@ -247,6 +319,24 @@
     },
     {
       "key": {
+        "uuid": "44d296a7_7768f78d",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:21:09Z",
+      "side": 1,
+      "message": "yeah better to be consistent",
+      "parentUuid": "faff0b0a_1f688952",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e94c6a0_7f669cd6",
         "filename": "sdl/syncstorage_abc.py",
         "patchSetId": 1
@@ -276,6 +366,24 @@
       "side": 1,
       "message": "A group and a member concept are the same as Redis Sets concept (SADD, SREM commands...). Should I add more explanation about group and member to the text below (line 453-\u003e)?",
       "parentUuid": "0e94c6a0_7f669cd6",
+      "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525b7080_0f7b1297",
+        "filename": "sdl/syncstorage_abc.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-11-11T14:21:09Z",
+      "side": 1,
+      "message": "Yes please. I\u0027ve used redis for years but haven\u0027t ever used that concept, so others may be in the same boat.",
+      "parentUuid": "3dba2af4_352195a4",
       "revId": "8267cd6dcd73a3b8be8101ce98be1963f698826d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
