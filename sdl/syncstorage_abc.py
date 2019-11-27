@@ -13,10 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# This source code is part of the near-RT RIC (RAN Intelligent Controller)
+# platform project (RICP).
+#
+
+
 """The module provides synchronous shareddatalayer interface."""
 from typing import (Dict, Set, List, Union)
 from abc import ABC, abstractmethod
-
+from sdl.exceptions import (
+    RejectedByBackend
+)
 
 __all__ = [
     'SyncStorageAbc',
@@ -48,8 +56,9 @@ class SyncLockAbc(ABC):
         self._expiration = expiration
 
     def __enter__(self, *args, **kwargs):
-        self.acquire(*args, **kwargs)
-        return self
+        if self.acquire(*args, **kwargs):
+            return self
+        raise RejectedByBackend("Unable to acquire lock within the time specified")
 
     def __exit__(self, exception_type, exception_value, traceback):
         self.release()
@@ -165,6 +174,24 @@ class SyncStorageAbc(ABC):
 
     A concrete implementation subclass 'SyncStorage' derives from this abstract class.
     """
+
+    @abstractmethod
+    def close(self):
+        """
+        Close the connection to shared data layer storage.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            NotConnected: If shareddatalayer is not connected to the backend data storage.
+            RejectedByBackend: If backend data storage rejects the request.
+            BackendError: If the backend data storage fails to process the request.
+        """
+        pass
 
     @abstractmethod
     def set(self, ns: str, data_map: Dict[str, bytes]) -> None:
