@@ -13,7 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# This source code is part of the near-RT RIC (RAN Intelligent Controller)
+# platform project (RICP).
+#
+
+
 "Exceptions raised by the shareddatalayer."
+
 
 class SdlTypeError(TypeError):
     """
@@ -23,9 +30,11 @@ class SdlTypeError(TypeError):
     """
     pass
 
+
 class SdlException(Exception):
     """Base exception class for shareddatalayer exceptions."""
     pass
+
 
 class NotConnected(SdlException):
     """
@@ -36,6 +45,7 @@ class NotConnected(SdlException):
     """
     pass
 
+
 class BackendError(SdlException):
     """
     Exception for request processing failure.
@@ -43,6 +53,7 @@ class BackendError(SdlException):
     altered. Client is advised to try the operation again later.
     """
     pass
+
 
 class RejectedByBackend(SdlException):
     """
