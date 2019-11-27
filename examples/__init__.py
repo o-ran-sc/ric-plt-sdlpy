@@ -15,29 +15,3 @@
 #
 # This source code is part of the near-RT RIC (RAN Intelligent Controller)
 # platform project (RICP).
-
-
-"""Shareddatalayer library."""
-
-from .syncstorage import (SyncStorage, SyncLock)
-from .exceptions import (
-    SdlTypeError,
-    SdlException,
-    BackendError,
-    NotConnected,
-    RejectedByBackend
-)
-
-
-__version__ = '0.0.1'
-
-
-__all__ = [
-    'SyncStorage',
-    'SyncLock',
-    'SdlTypeError',
-    'SdlException',
-    'BackendError',
-    'NotConnected',
-    'RejectedByBackend'
-]
