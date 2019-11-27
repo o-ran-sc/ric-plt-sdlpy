@@ -13,10 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# This source code is part of the near-RT RIC (RAN Intelligent Controller)
+# platform project (RICP).
+#
+
+
 """The module provides synchronous shareddatalayer interface."""
 from typing import (Dict, Set, List, Union)
 from abc import ABC, abstractmethod
-
+from sdl.exceptions import (
+    RejectedByBackend
+)
 
 __all__ = [
     'SyncStorageAbc',
@@ -48,8 +56,9 @@ class SyncLockAbc(ABC):
         self._expiration = expiration
 
     def __enter__(self, *args, **kwargs):
-        self.acquire(*args, **kwargs)
-        return self
+        if self.acquire(*args, **kwargs):
+            return self
+        raise RejectedByBackend("Unable to acquire lock within the time specified")
 
     def __exit__(self, exception_type, exception_value, traceback):
         self.release()
@@ -84,7 +93,6 @@ class SyncLockAbc(ABC):
         """
         pass
 
-
     def release(self) -> None:
         """
         Release a lock atomically.
@@ -108,7 +116,6 @@ class SyncLockAbc(ABC):
         """
         pass
 
-
     def refresh(self) -> None:
         """
         Refresh the remaining validity time of the existing lock back to an initial value.
@@ -129,7 +136,6 @@ class SyncLockAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     def get_validity_time(self) -> Union[int, float]:
         """
@@ -167,6 +173,24 @@ class SyncStorageAbc(ABC):
     """
 
     @abstractmethod
+    def close(self):
+        """
+        Close the connection to shared data layer storage.
+
+        Args:
+            None
+
+        Returns:
+            None
+
+        Raises:
+            NotConnected: If shareddatalayer is not connected to the backend data storage.
+            RejectedByBackend: If backend data storage rejects the request.
+            BackendError: If the backend data storage fails to process the request.
+        """
+        pass
+
+    @abstractmethod
     def set(self, ns: str, data_map: Dict[str, bytes]) -> None:
         """
         Write data to shared data layer storage.
@@ -191,7 +215,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def set_if(self, ns: str, key: str, old_data: bytes, new_data: bytes) -> bool:
@@ -221,7 +244,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def set_if_not_exists(self, ns: str, key: str, data: bytes) -> bool:
@@ -253,7 +275,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def get(self, ns: str, keys: Union[str, Set[str]]) -> Dict[str, bytes]:
         """
@@ -279,7 +300,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def find_keys(self, ns: str, key_prefix: str) -> List[str]:
@@ -308,7 +328,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def find_and_get(self, ns: str, key_prefix: str, atomic: bool) -> Dict[str, bytes]:
@@ -341,7 +360,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def remove(self, ns: str, keys: Union[str, Set[str]]) -> None:
         """
@@ -367,7 +385,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def remove_if(self, ns: str, key: str, data: bytes) -> bool:
@@ -397,7 +414,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def remove_all(self, ns: str) -> None:
         """
@@ -423,7 +439,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def add_member(self, ns: str, group: str, members: Union[bytes, Set[bytes]]) -> None:
@@ -455,7 +470,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def remove_member(self, ns: str, group: str, members: Union[bytes, Set[bytes]]) -> None:
         """
@@ -486,7 +500,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def remove_group(self, ns: str, group: str) -> None:
         """
@@ -513,7 +526,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def get_members(self, ns: str, group: str) -> Set[bytes]:
@@ -543,7 +555,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def is_member(self, ns: str, group: str, member: bytes) -> bool:
         """
@@ -572,7 +583,6 @@ class SyncStorageAbc(ABC):
         """
         pass
 
-
     @abstractmethod
     def group_size(self, ns: str, group: str) -> int:
         """
@@ -599,7 +609,6 @@ class SyncStorageAbc(ABC):
             BackendError: If the backend data storage fails to process the request.
         """
         pass
-
 
     @abstractmethod
     def get_lock_resource(self, ns: str, resource: str,
