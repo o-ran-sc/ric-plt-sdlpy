@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b233a7d_30166fa9",
+        "filename": "examples/sync.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-02T19:41:03Z",
+      "side": 1,
+      "message": "this file could really be cleaned up if you made a function that takes in a function and runs through the same try except except sequence. a1/a1/controller.py uses this pattern.",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7275121f_deceddfe",
+        "filename": "examples/sync.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-02T19:41:03Z",
+      "side": 1,
+      "message": "{} would be preferred to dict()",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4c48569_779744d0",
+        "filename": "examples/sync.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-02T19:41:03Z",
+      "side": 1,
+      "message": "does normal sdl usage need groups? still unclear to me when this is needed. maybe some verbiage about when a user might want this would be good.",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c663a3_5c8337e3",
+        "filename": "sdl/backend/redis.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-02T19:41:03Z",
+      "side": 1,
+      "message": "i did not review this super carefully. implements the abc but i assume the implementation is correct and well tested...",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8d5edf6_fc3c1fa1",
+        "filename": "tests/backend/test_redis.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-02T19:41:03Z",
+      "side": 1,
+      "message": "i did not review this",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aca14073_6d18a8c7",
+        "filename": "tests/test_syncstorage.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-02T19:41:03Z",
+      "side": 1,
+      "message": "i did not review this",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
