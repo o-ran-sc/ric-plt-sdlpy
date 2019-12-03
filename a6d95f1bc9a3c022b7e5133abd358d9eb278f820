@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "10810a3d_fe8f963c",
+        "filename": "examples/sync.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-12-03T09:29:07Z",
+      "side": 1,
+      "message": "Thanks, good idea. Added _try_func_return() in patch set #8. OK?",
+      "parentUuid": "9b233a7d_30166fa9",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7275121f_deceddfe",
         "filename": "examples/sync.py",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "018f6fa2_4c3dfec5",
+        "filename": "examples/sync.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-12-03T09:29:07Z",
+      "side": 1,
+      "message": "OK. Fixed in patch set #8. OK?",
+      "parentUuid": "7275121f_deceddfe",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4c48569_779744d0",
         "filename": "examples/sync.py",
         "patchSetId": 7
@@ -47,6 +83,24 @@
       "writtenOn": "2019-12-02T19:41:03Z",
       "side": 1,
       "message": "does normal sdl usage need groups? still unclear to me when this is needed. maybe some verbiage about when a user might want this would be good.",
+      "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6713c7e_bd1485e6",
+        "filename": "examples/sync.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-12-03T09:29:07Z",
+      "side": 1,
+      "message": "An SDL group is like a set in python, unique connection of values(members). I think there will be a use case for SDL groups, groups were also implemented in SDL Golang version too.\nUpdate a comment line a bit and added also a validation that member \u0027a\u0027 is only once in the group. Patch set #8 contains these changes. OK?",
+      "parentUuid": "e4c48569_779744d0",
       "revId": "a6d95f1bc9a3c022b7e5133abd358d9eb278f820",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
