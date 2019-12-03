@@ -16,6 +16,24 @@
       "revId": "96bdb15c6ae3ff0b15b1077c90732186f114f851",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44db382b_5ecbf0d6",
+        "filename": "requirements.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2019-12-03T09:29:07Z",
+      "side": 1,
+      "message": "Thanks for the comment.\nRemoved requirements.txt file in patch set #7. OK?",
+      "parentUuid": "61eeec5d_e3825524",
+      "revId": "96bdb15c6ae3ff0b15b1077c90732186f114f851",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
