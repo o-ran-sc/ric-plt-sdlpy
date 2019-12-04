@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3a1ddbc_ca38169c",
+        "filename": "examples/sync.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-04T12:53:11Z",
+      "side": 1,
+      "message": "this file is greatly improved here.",
+      "revId": "bee1459a387ce8b1dc288b684cc52c6b04102adb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c789eba_21e45d8d",
+        "filename": "examples/sync.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-04T12:53:11Z",
+      "side": 1,
+      "message": "yeah this is waay better",
+      "revId": "bee1459a387ce8b1dc288b684cc52c6b04102adb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91661643_f75d6cef",
+        "filename": "setup.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2019-12-04T12:53:11Z",
+      "side": 1,
+      "message": "possible suggestion: using something like \"ricsdl\"\n\neven though \"sdl\" isn\u0027t taken it looks like, many projects seem to use \"SDL\" in their package descriptions. So this may cause confusion: https://pypi.org/search/?q\u003dsdl\n\nfor example there is a package called \"pysdl2\" already: https://pypi.org/project/PySDL2/",
+      "revId": "bee1459a387ce8b1dc288b684cc52c6b04102adb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
