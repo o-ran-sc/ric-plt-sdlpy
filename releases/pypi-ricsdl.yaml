@@ -1,0 +1,5 @@
+---
+pypi_project: ricsdl
+python_version: '3.7'
+version: 1.0.1
+log_dir: ric-plt-sdlpy-pypi-merge-master/2
