@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75068669_55506ae3",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-12-06T14:57:34Z",
+      "side": 1,
+      "message": "Please remove the hyphen next time",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 8
+      },
+      "revId": "8d3d9a336fcd38a5fb061b42ad177e8df955d87a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41d77bf9_3c35f446",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000014
+      },
+      "writtenOn": "2019-12-06T14:57:34Z",
+      "side": 1,
+      "message": "I recommend you switch to a simple format, maybe a list in RST. This manually formatted table with narrow columns has no room for a decent description of release content, which should include links to Jira issues etc.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 1
+      },
+      "revId": "8d3d9a336fcd38a5fb061b42ad177e8df955d87a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
