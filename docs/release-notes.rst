@@ -17,27 +17,31 @@
 ..
 
 
-Release-Notes
+Release Notes
 =============
 
 
-This document provides the release notes for release 1.0.0 of ricsdl.
+This document provides the release notes of the ricsdl library.
 
 .. contents::
    :depth: 3
    :local:
 
 
+
+
 Version history
 ---------------
 
-+--------------------+--------------------+--------------------+--------------------+
-| **Date**           | **Ver.**           | **Author**         | **Comment**        |
-|                    |                    |                    |                    |
-+--------------------+--------------------+--------------------+--------------------+
-| 2019-12-05         | 1.0.0              | T Tietavainen      | First version      |
-|                    |                    |                    |                    |
-+--------------------+--------------------+--------------------+--------------------+
+[1.0.1] - 2019-12-06
+
+* Version bump.
+
+[1.0.0] - 2019-12-05
+
+* First version.
+
+
 
 
 Summary
