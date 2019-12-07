@@ -33,6 +33,11 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[1.0.2] - 2019-12-18
+
+* Take Hiredis package into use in Redis database backend.
+* Add unit tests for configuration handling.
+
 [1.0.1] - 2019-12-06
 
 * Version bump.
