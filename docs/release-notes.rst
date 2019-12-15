@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.0.0] - 2019-12-16
+
+* Change find_keys() and find_and_get() API functions to support glob-style regular expressions.
+
 [1.0.1] - 2019-12-06
 
 * Version bump.

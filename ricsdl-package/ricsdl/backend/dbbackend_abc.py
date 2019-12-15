@@ -54,12 +54,12 @@ class DbBackendAbc(ABC):
         pass
 
     @abstractmethod
-    def find_keys(self, ns: str, key_prefix: str) -> List[str]:
+    def find_keys(self, ns: str, key_pattern: str) -> List[str]:
         """"Return all the keys matching search pattern under a namespace in database."""
         pass
 
     @abstractmethod
-    def find_and_get(self, ns: str, key_prefix: str, atomic: bool) -> Dict[str, bytes]:
+    def find_and_get(self, ns: str, key_pattern: str) -> Dict[str, bytes]:
         """
         Return all the keys with their values matching search pattern under a namespace in
         database.

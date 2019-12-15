@@ -300,12 +300,23 @@ class SyncStorageAbc(ABC):
         pass
 
     @abstractmethod
-    def find_keys(self, ns: str, key_prefix: str) -> List[str]:
-        """
+    def find_keys(self, ns: str, key_pattern: str) -> List[str]:
+        r"""
         Find all keys matching search pattern under the namespace.
+
+        Supported glob-style patterns:
+            h?llo matches hello, hallo and hxllo
+            h*llo matches hllo and heeeello
+            h[ae]llo matches hello and hallo, but not hillo
+            h[^e]llo matches hallo, hbllo, ... but not hello
+            h[a-b]llo matches hallo and hbllo
+
+        If searched key itself contains a special character, use a backslash (\) character to
+        escape the special character to match it verbatim.
 
         No prior knowledge about the keys in the given namespace exists, thus operation is not
         guaranteed to be atomic or isolated.
+
         All the exceptions except SdlTypeError are derived from SdlException base class. Client
         can catch only that exception if separate handling for different SDL error situations is
         not needed. Exception SdlTypeError is derived from build-in TypeError and it indicates
@@ -313,8 +324,7 @@ class SyncStorageAbc(ABC):
 
         Args:
             ns (str): Namespace under which this operation is targeted.
-            key_prefix (str): Only keys starting with given keyPrefix are returned. Passing empty
-                              string as keyPrefix will return all the keys.
+            key_pattern (str): Key search pattern.
 
         Returns:
             (list of str): A list of found keys.
@@ -328,13 +338,23 @@ class SyncStorageAbc(ABC):
         pass
 
     @abstractmethod
-    def find_and_get(self, ns: str, key_prefix: str, atomic: bool) -> Dict[str, bytes]:
-        """
+    def find_and_get(self, ns: str, key_pattern: str) -> Dict[str, bytes]:
+        r"""
         Find keys and get their respective data from SDL storage.
 
-        Only those entries that are matching prefix will be returned.
-        NOTE: In atomic action, if the prefix produces huge number of matches, that can have
-        a severe impact on system performance, due to DB is blocked for long time.
+        Supported glob-style patterns:
+            h?llo matches hello, hallo and hxllo
+            h*llo matches hllo and heeeello
+            h[ae]llo matches hello and hallo, but not hillo
+            h[^e]llo matches hallo, hbllo, ... but not hello
+            h[a-b]llo matches hallo and hbllo
+
+        If searched key itself contains a special character, use a backslash (\) character to
+        escape the special character to match it verbatim.
+
+        No prior knowledge about the keys in the given namespace exists, thus operation is not
+        guaranteed to be atomic or isolated.
+
         All the exceptions except SdlTypeError are derived from SdlException base class. Client
         can catch only that exception if separate handling for different SDL error situations is
         not needed. Exception SdlTypeError is derived from build-in TypeError and it indicates
@@ -342,10 +362,7 @@ class SyncStorageAbc(ABC):
 
         Args:
             ns (str): Namespace under which this operation is targeted.
-            key_prefix (str): Only keys starting with given keyPrefix are returned. Passing empty
-                              string as keyPrefix will return all the keys.
-            atomic (bool): True to find keys and get their respective data in one atomic operation,
-                           false to find keys and get their respective data non-atomically.
+            key_pattern (str): Key search pattern.
 
         Returns:
             (dict of str: bytes): A dictionary mapping of a key to the read data from the storage.
