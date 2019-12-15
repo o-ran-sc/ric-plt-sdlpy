@@ -33,6 +33,13 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.0.0] - 2019-12-19
+
+* Change find_keys() and find_and_get() API functions to support glob-style
+  regular expression in a key search pattern. API backward incompatible change.
+* Remove 'atomic' parameter of find_and_get() API function. API backward
+  incompatible change.
+
 [1.0.2] - 2019-12-18
 
 * Take Hiredis package into use in Redis database backend.

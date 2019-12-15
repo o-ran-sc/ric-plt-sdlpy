@@ -32,12 +32,11 @@ def sync_storage_fixture(request):
     request.cls.ns = 'some-ns'
     request.cls.key = 'a'
     request.cls.keys = {'a', 'b'}
-    request.cls.dm = {'a': b'1', 'b': b'2'}
+    request.cls.dm = {'b': b'2', 'a': b'1'}
     request.cls.old_data = b'1'
     request.cls.new_data = b'3'
     request.cls.keyprefix = 'x'
     request.cls.matchedkeys = ['x1', 'x2', 'x3', 'x4', 'x5']
-    request.cls.is_atomic = True
     request.cls.group = 'some-group'
     request.cls.groupmembers = set([b'm1', b'm2'])
     request.cls.groupmember = b'm1'
@@ -119,6 +118,8 @@ class TestSyncStorage:
         assert len(call_args[1]) == len(self.keys)
         assert all(k in call_args[1] for k in self.keys)
         assert ret == self.dm
+        # Validate that SDL returns a dictionary with keys in alphabetical order
+        assert sorted(self.dm)[0] == list(ret.keys())[0]
 
     def test_get_function_can_return_empty_dict_when_no_key_values_exist(self):
         self.mock_db_backend.get.return_value = dict()
@@ -156,25 +157,23 @@ class TestSyncStorage:
 
     def test_find_and_get_function_success(self):
         self.mock_db_backend.find_and_get.return_value = self.dm
-        ret = self.storage.find_and_get(self.ns, self.keyprefix, self.is_atomic)
-        self.mock_db_backend.find_and_get.assert_called_once_with(self.ns, self.keyprefix,
-                                                                  self.is_atomic)
+        ret = self.storage.find_and_get(self.ns, self.keyprefix)
+        self.mock_db_backend.find_and_get.assert_called_once_with(self.ns, self.keyprefix)
         assert ret == self.dm
+        # Validate that SDL returns a dictionary with keys in alphabetical order
+        assert sorted(self.dm)[0] == list(ret.keys())[0]
 
     def test_find_and_get_function_can_return_empty_dict_when_no_keys_exist(self):
         self.mock_db_backend.find_and_get.return_value = dict()
-        ret = self.storage.find_and_get(self.ns, self.keyprefix, self.is_atomic)
-        self.mock_db_backend.find_and_get.assert_called_once_with(self.ns, self.keyprefix,
-                                                                  self.is_atomic)
+        ret = self.storage.find_and_get(self.ns, self.keyprefix)
+        self.mock_db_backend.find_and_get.assert_called_once_with(self.ns, self.keyprefix)
         assert ret == dict()
 
     def test_find_and_get_function_can_raise_exception_for_wrong_argument(self):
         with pytest.raises(SdlTypeError):
-            self.storage.find_and_get(0xbad, self.keyprefix, self.is_atomic)
+            self.storage.find_and_get(0xbad, self.keyprefix)
         with pytest.raises(SdlTypeError):
-            self.storage.find_and_get(self.ns, 0xbad, self.is_atomic)
-        with pytest.raises(SdlTypeError):
-            self.storage.find_and_get(self.ns, self.keyprefix, 0xbad)
+            self.storage.find_and_get(self.ns, 0xbad)
 
     def test_remove_function_success(self):
         self.storage.remove(self.ns, self.keys)
@@ -214,7 +213,7 @@ class TestSyncStorage:
     def test_remove_all_function_success(self):
         self.mock_db_backend.find_keys.return_value = ['a1']
         self.storage.remove_all(self.ns)
-        self.mock_db_backend.find_keys.assert_called_once_with(self.ns, '')
+        self.mock_db_backend.find_keys.assert_called_once_with(self.ns, '*')
         self.mock_db_backend.remove.assert_called_once_with(self.ns,
                                                             self.mock_db_backend.find_keys.return_value)
 

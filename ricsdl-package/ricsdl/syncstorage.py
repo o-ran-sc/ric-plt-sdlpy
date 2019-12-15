@@ -142,15 +142,17 @@ class SyncStorage(SyncStorageAbc):
 
     @func_arg_checker(SdlTypeError, 1, ns=str, keys=(str, builtins.set))
     def get(self, ns: str, keys: Union[str, Set[str]]) -> Dict[str, bytes]:
-        return self.__dbbackend.get(ns, list(keys))
+        disordered = self.__dbbackend.get(ns, list(keys))
+        return {k: disordered[k] for k in sorted(disordered)}
 
-    @func_arg_checker(SdlTypeError, 1, ns=str, key_prefix=str)
-    def find_keys(self, ns: str, key_prefix: str) -> List[str]:
-        return self.__dbbackend.find_keys(ns, key_prefix)
+    @func_arg_checker(SdlTypeError, 1, ns=str, key_pattern=str)
+    def find_keys(self, ns: str, key_pattern: str) -> List[str]:
+        return self.__dbbackend.find_keys(ns, key_pattern)
 
-    @func_arg_checker(SdlTypeError, 1, ns=str, key_prefix=str, atomic=bool)
-    def find_and_get(self, ns: str, key_prefix: str, atomic: bool) -> Dict[str, bytes]:
-        return self.__dbbackend.find_and_get(ns, key_prefix, atomic)
+    @func_arg_checker(SdlTypeError, 1, ns=str, key_pattern=str)
+    def find_and_get(self, ns: str, key_pattern: str) -> Dict[str, bytes]:
+        disordered = self.__dbbackend.find_and_get(ns, key_pattern)
+        return {k: disordered[k] for k in sorted(disordered)}
 
     @func_arg_checker(SdlTypeError, 1, ns=str, keys=(str, builtins.set))
     def remove(self, ns: str, keys: Union[str, Set[str]]) -> None:
@@ -162,7 +164,7 @@ class SyncStorage(SyncStorageAbc):
 
     @func_arg_checker(SdlTypeError, 1, ns=str)
     def remove_all(self, ns: str) -> None:
-        keys = self.__dbbackend.find_keys(ns, '')
+        keys = self.__dbbackend.find_keys(ns, '*')
         if keys:
             self.__dbbackend.remove(ns, keys)
 
