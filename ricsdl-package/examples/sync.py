@@ -132,13 +132,14 @@ assert my_ret_dict == {}
 
 # Finds keys under given namespace that are matching to given key prefix 'my_k'.
 _try_func_return(lambda: mysdl.set(MY_NS, {'my_key': b'my_value'}))
-ret_keys = _try_func_return(lambda: mysdl.find_keys(MY_NS, ''))
+ret_keys = _try_func_return(lambda: mysdl.find_keys(MY_NS, 'my_k*'))
 assert ret_keys == ['my_key']
 
 
-# Finds keys and their values under given namespace that are matching to given key prefix 'my_k'.
+# Finds keys and their values under given namespace that are matching to given key search
+# pattern 'my_k*'.
 # Note that the type of returned value is bytes.
-ret_key_values = _try_func_return(lambda: mysdl.find_and_get(MY_NS, '', atomic=True))
+ret_key_values = _try_func_return(lambda: mysdl.find_and_get(MY_NS, 'my_k*'))
 assert ret_key_values == {'my_key': b'my_value'}
 
 _try_func_return(lambda: mysdl.remove_all(MY_NS))
