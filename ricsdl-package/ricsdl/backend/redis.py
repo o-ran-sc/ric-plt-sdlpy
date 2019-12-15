@@ -118,18 +118,17 @@ class RedisBackend(DbBackendAbc):
                     ret[keys[idx]] = val
             return ret
 
-    def find_keys(self, ns: str, key_prefix: str) -> List[str]:
-        escaped_key_prefix = self._escape_characters(key_prefix)
-        db_escaped_key_prefix = self._add_key_ns_prefix(ns, escaped_key_prefix + '*')
+    def find_keys(self, ns: str, key_pattern: str) -> List[str]:
+        db_key_pattern = self._add_key_ns_prefix(ns, key_pattern)
         with _map_to_sdl_exception():
-            ret = self.__redis.keys(db_escaped_key_prefix)
+            ret = self.__redis.keys(db_key_pattern)
             return self._strip_ns_from_bin_keys(ns, ret)
 
-    def find_and_get(self, ns: str, key_prefix: str, atomic: bool) -> Dict[str, bytes]:
+    def find_and_get(self, ns: str, key_pattern: str) -> Dict[str, bytes]:
         # todo: replace below implementation with redis 'NGET' module
         ret = dict()  # type: Dict[str, bytes]
         with _map_to_sdl_exception():
-            matched_keys = self.find_keys(ns, key_prefix)
+            matched_keys = self.find_keys(ns, key_pattern)
             if matched_keys:
                 ret = self.get(ns, matched_keys)
         return ret
@@ -196,23 +195,17 @@ class RedisBackend(DbBackendAbc):
     def _strip_ns_from_bin_keys(cls, ns: str, nskeylist: List[bytes]) -> List[str]:
         ret_keys = []
         for k in nskeylist:
-            nskey = k.decode("utf-8").split(',', 1)
+            try:
+                redis_key = k.decode("utf-8")
+            except UnicodeDecodeError as exc:
+                msg = u'Namespace %s key conversion to string failed: %s' % (ns, str(exc))
+                raise RejectedByBackend(msg)
+            nskey = redis_key.split(',', 1)
             if len(nskey) != 2:
-                msg = u'Illegal namespace %s key:%s' % (ns, nskey)
+                msg = u'Namespace %s key:%s has no namespace prefix' % (ns, redis_key)
                 raise RejectedByBackend(msg)
             ret_keys.append(nskey[1])
         return ret_keys
-
-    @classmethod
-    def _escape_characters(cls, pattern: str) -> str:
-        return pattern.translate(str.maketrans(
-            {"(": r"\(",
-             ")": r"\)",
-             "[": r"\[",
-             "]": r"\]",
-             "*": r"\*",
-             "?": r"\?",
-             "\\": r"\\"}))
 
     def get_redis_connection(self):
         """Return existing Redis database connection."""

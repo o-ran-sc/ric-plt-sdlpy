@@ -41,8 +41,8 @@ def redis_backend_fixture(request):
     request.cls.data = b'123'
     request.cls.old_data = b'1'
     request.cls.new_data = b'3'
-    request.cls.keyprefix = 'x?'
-    request.cls.keyprefix_redis = r'{some-ns},x\?*'
+    request.cls.keypattern = r'key\[123\]-\**'
+    request.cls.keypattern_redis = r'{some-ns},key\[123\]-\**'
     request.cls.matchedkeys = ['x1', 'x2', 'x3', 'x4', 'x5']
     request.cls.matchedkeys_redis = [b'{some-ns},x1', b'{some-ns},x2', b'{some-ns},x3',
                                      b'{some-ns},x4', b'{some-ns},x5']
@@ -53,7 +53,6 @@ def redis_backend_fixture(request):
     request.cls.group_redis = '{some-ns},some-group'
     request.cls.groupmembers = set([b'm1', b'm2'])
     request.cls.groupmember = b'm1'
-    request.cls.is_atomic = True
 
     request.cls.configuration = Mock()
     mock_conf_params = _Configuration.Params(db_host=None,
@@ -141,35 +140,76 @@ class TestRedisBackend:
 
     def test_find_keys_function_success(self):
         self.mock_redis.keys.return_value = self.matchedkeys_redis
-        ret = self.db.find_keys(self.ns, self.keyprefix)
-        self.mock_redis.keys.assert_called_once_with(self.keyprefix_redis)
+        ret = self.db.find_keys(self.ns, self.keypattern)
+        self.mock_redis.keys.assert_called_once_with(self.keypattern_redis)
         assert ret == self.matchedkeys
 
     def test_find_keys_function_returns_empty_list_when_no_matching_keys_found(self):
         self.mock_redis.keys.return_value = []
-        ret = self.db.find_keys(self.ns, self.keyprefix)
-        self.mock_redis.keys.assert_called_once_with(self.keyprefix_redis)
+        ret = self.db.find_keys(self.ns, self.keypattern)
+        self.mock_redis.keys.assert_called_once_with(self.keypattern_redis)
         assert ret == []
 
     def test_find_keys_function_can_map_redis_exception_to_sdl_exception(self):
         self.mock_redis.keys.side_effect = redis_exceptions.ResponseError('redis error!')
         with pytest.raises(ricsdl.exceptions.RejectedByBackend):
-            self.db.find_keys(self.ns, self.keyprefix)
+            self.db.find_keys(self.ns, self.keypattern)
+
+    def test_find_keys_function_can_raise_exception_when_redis_key_convert_to_string_fails(self):
+        # Redis returns an illegal key, which conversion to string fails
+        corrupt_redis_key = b'\x81'
+        self.mock_redis.keys.return_value = [corrupt_redis_key]
+        with pytest.raises(ricsdl.exceptions.RejectedByBackend) as excinfo:
+            self.db.find_keys(self.ns, self.keypattern)
+        assert f"Namespace {self.ns} key:{corrupt_redis_key} "
+        "has no namespace prefix" in str(excinfo.value)
+
+    def test_find_keys_function_can_raise_exception_when_redis_key_is_without_prefix(self):
+        # Redis returns an illegal key, which doesn't have comma separated namespace prefix
+        corrupt_redis_key = 'some-corrupt-key'
+        self.mock_redis.keys.return_value = [f'{corrupt_redis_key}'.encode()]
+        with pytest.raises(ricsdl.exceptions.RejectedByBackend) as excinfo:
+            self.db.find_keys(self.ns, self.keypattern)
+        assert f"Namespace {self.ns} key:{corrupt_redis_key} "
+        "has no namespace prefix" in str(excinfo.value)
 
     def test_find_and_get_function_success(self):
         self.mock_redis.keys.return_value = self.matchedkeys_redis
         self.mock_redis.mget.return_value = self.matcheddata_dl_redis
-        ret = self.db.find_and_get(self.ns, self.keyprefix, self.is_atomic)
-        self.mock_redis.keys.assert_called_once_with(self.keyprefix_redis)
+        ret = self.db.find_and_get(self.ns, self.keypattern)
+        self.mock_redis.keys.assert_called_once_with(self.keypattern_redis)
         self.mock_redis.mget.assert_called_once_with([i.decode() for i in self.matchedkeys_redis])
         assert ret == self.matcheddata_dm
 
     def test_find_and_get_function_returns_empty_dict_when_no_matching_keys_exist(self):
         self.mock_redis.keys.return_value = list()
-        ret = self.db.find_and_get(self.ns, self.keyprefix, self.is_atomic)
-        self.mock_redis.keys.assert_called_once_with(self.keyprefix_redis)
+        ret = self.db.find_and_get(self.ns, self.keypattern)
+        self.mock_redis.keys.assert_called_once_with(self.keypattern_redis)
         assert not self.mock_redis.mget.called
         assert ret == dict()
+
+    def test_find_and_get_function_can_map_redis_exception_to_sdl_exception(self):
+        self.mock_redis.keys.side_effect = redis_exceptions.ResponseError('redis error!')
+        with pytest.raises(ricsdl.exceptions.RejectedByBackend):
+            self.db.find_and_get(self.ns, self.keypattern)
+
+    def test_find_and_get_function_can_raise_exception_when_redis_key_convert_to_string_fails(self):
+        # Redis returns an illegal key, which conversion to string fails
+        corrupt_redis_key = b'\x81'
+        self.mock_redis.keys.return_value = [corrupt_redis_key]
+        with pytest.raises(ricsdl.exceptions.RejectedByBackend) as excinfo:
+            self.db.find_and_get(self.ns, self.keypattern)
+        assert f"Namespace {self.ns} key:{corrupt_redis_key} "
+        "has no namespace prefix" in str(excinfo.value)
+
+    def test_find_and_get_function_can_raise_exception_when_redis_key_is_without_prefix(self):
+        # Redis returns an illegal key, which doesn't have comma separated namespace prefix
+        corrupt_redis_key = 'some-corrupt-key'
+        self.mock_redis.keys.return_value = [f'{corrupt_redis_key}'.encode()]
+        with pytest.raises(ricsdl.exceptions.RejectedByBackend) as excinfo:
+            self.db.find_and_get(self.ns, self.keypattern)
+        assert f"Namespace {self.ns} key:{corrupt_redis_key} "
+        "has no namespace prefix" in str(excinfo.value)
 
     def test_remove_function_success(self):
         self.db.remove(self.ns, self.keys)
@@ -353,6 +393,16 @@ class TestRedisBackendLock:
             keys=[self.lockname_redis], args=[123], client=self.mock_redis)
         assert ret == 2
 
+    def test_get_validity_time_function_second_fraction_success(self):
+        self.mock_redis_lock.name = self.lockname_redis
+        self.mock_redis_lock.local.token = 123
+        self.mock_lua_get_validity_time.return_value = 234
+
+        ret = self.lock.get_validity_time()
+        self.mock_lua_get_validity_time.assert_called_once_with(
+            keys=[self.lockname_redis], args=[123], client=self.mock_redis)
+        assert ret == 0.234
+
     def test_get_validity_time_function_can_raise_exception_if_lock_is_unlocked(self):
         self.mock_redis_lock.name = self.lockname_redis
         self.mock_redis_lock.local.token = None
@@ -371,8 +421,17 @@ class TestRedisBackendLock:
         assert f"Getting validity time of a lock {self.lockname} failed with error code: -10" in str(excinfo.value)
 
     def test_redis_backend_lock_object_string_representation(self):
-        str_out = str(self.lock)
-        assert str_out is not None
+        expected_lock_info = {'lock namespace': 'some-ns',
+                              'lock name': 'some-lock-name',
+                              'lock status': 'locked'}
+        assert str(self.lock) == str(expected_lock_info)
+
+    def test_redis_backend_lock_object_string_representation_can_catch_redis_exception(self):
+        self.mock_redis_lock.owned.side_effect = redis_exceptions.LockError('redis lock error!')
+        expected_lock_info = {'lock namespace': 'some-ns',
+                              'lock name': 'some-lock-name',
+                              'lock status': 'Error: redis lock error!'}
+        assert str(self.lock) == str(expected_lock_info)
 
 
 def test_redis_response_error_exception_is_mapped_to_rejected_by_backend_sdl_exception():
