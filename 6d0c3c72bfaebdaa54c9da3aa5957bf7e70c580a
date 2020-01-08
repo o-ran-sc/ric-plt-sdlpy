@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f936765b_a6c789dd",
+        "filename": "ricsdl-package/ricsdl/backend/fake_db.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-08T19:05:09Z",
+      "side": 1,
+      "message": "wonderful.\n\nwhen I instantiate SyncStorage, how do I specify this backend?",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7cfb1bb_6637c252",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-08T19:05:09Z",
+      "side": 1,
+      "message": "I see, so this env variable switches the backend? So we instantiate syncstorage as normal, but set an ENV variable in the testing env?",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
