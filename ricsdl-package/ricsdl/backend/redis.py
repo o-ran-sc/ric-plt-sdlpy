@@ -85,6 +85,7 @@ class RedisBackend(DbBackendAbc):
     def __str__(self):
         return str(
             {
+                "DB type": "Redis",
                 "Redis connection": repr(self.__redis)
             }
         )
@@ -252,6 +253,7 @@ class RedisBackendLock(DbBackendLockAbc):
     def __str__(self):
         return str(
             {
+                "lock DB type": "Redis",
                 "lock namespace": self._ns,
                 "lock name": self._lock_name,
                 "lock status": self._lock_status_to_string()

@@ -69,7 +69,9 @@ class SyncLock(SyncLockAbc):
                  storage: 'SyncStorage') -> None:
 
         super().__init__(ns, name, expiration)
-        self.__dbbackendlock = ricsdl.backend.get_backend_lock_instance(ns, name, expiration,
+        self.__configuration = _Configuration()
+        self.__dbbackendlock = ricsdl.backend.get_backend_lock_instance(self.__configuration,
+                                                                        ns, name, expiration,
                                                                         storage.get_backend())
 
     def __str__(self):
