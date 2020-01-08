@@ -25,6 +25,7 @@ from redis import exceptions as redis_exceptions
 import ricsdl.backend
 from ricsdl.backend.redis import (RedisBackendLock, _map_to_sdl_exception)
 from ricsdl.configuration import _Configuration
+from ricsdl.configuration import DbBackendType
 import ricsdl.exceptions
 
 
@@ -58,7 +59,8 @@ def redis_backend_fixture(request):
     mock_conf_params = _Configuration.Params(db_host=None,
                                              db_port=None,
                                              db_sentinel_port=None,
-                                             db_sentinel_master_name=None)
+                                             db_sentinel_master_name=None,
+                                             db_type=DbBackendType.REDIS)
     request.cls.configuration.get_params.return_value = mock_conf_params
     with patch('ricsdl.backend.redis.Redis') as mock_redis:
         db = ricsdl.backend.get_backend_instance(request.cls.configuration)
@@ -86,7 +88,7 @@ class TestRedisBackend:
                                                                 self.new_data, self.old_data)
         assert ret is True
 
-    def test_set_if_function_returns_false_if_same_data_already_exists(self):
+    def test_set_if_function_returns_false_if_existing_key_value_not_expected(self):
         self.mock_redis.execute_command.return_value = False
         ret = self.db.set_if(self.ns, self.key, self.old_data, self.new_data)
         self.mock_redis.execute_command.assert_called_once_with('SETIE', self.key_redis,
@@ -346,8 +348,18 @@ def redis_backend_lock_fixture(request, mock_redis_lock):
 
     mocked_dbbackend = Mock()
     mocked_dbbackend.get_redis_connection.return_value = request.cls.mock_redis
+
+    request.cls.configuration = Mock()
+    mock_conf_params = _Configuration.Params(db_host=None,
+                                             db_port=None,
+                                             db_sentinel_port=None,
+                                             db_sentinel_master_name=None,
+                                             db_type=DbBackendType.REDIS)
+    request.cls.configuration.get_params.return_value = mock_conf_params
+
     with patch('ricsdl.backend.redis.Lock') as mock_redis_lock:
-        lock = ricsdl.backend.get_backend_lock_instance(request.cls.ns, request.cls.lockname,
+        lock = ricsdl.backend.get_backend_lock_instance(request.cls.configuration,
+                                                        request.cls.ns, request.cls.lockname,
                                                         request.cls.expiration, mocked_dbbackend)
         request.cls.mock_redis_lock = mock_redis_lock.return_value
         request.cls.lock = lock
@@ -358,8 +370,16 @@ def redis_backend_lock_fixture(request, mock_redis_lock):
 @pytest.mark.usefixtures('redis_backend_lock_fixture')
 class TestRedisBackendLock:
     def test_acquire_function_success(self):
-        self.lock.acquire(self.retry_interval, self.retry_timeout)
+        self.mock_redis_lock.acquire.return_value = True
+        ret = self.lock.acquire(self.retry_interval, self.retry_timeout)
         self.mock_redis_lock.acquire.assert_called_once_with(blocking_timeout=self.retry_timeout)
+        assert ret is True
+
+    def test_acquire_function_returns_false_if_lock_is_not_acquired(self):
+        self.mock_redis_lock.acquire.return_value = False
+        ret = self.lock.acquire(self.retry_interval, self.retry_timeout)
+        self.mock_redis_lock.acquire.assert_called_once_with(blocking_timeout=self.retry_timeout)
+        assert ret is False
 
     def test_acquire_function_can_map_redis_exception_to_sdl_exception(self):
         self.mock_redis_lock.acquire.side_effect = redis_exceptions.LockError('redis lock error!')
@@ -421,14 +441,16 @@ class TestRedisBackendLock:
         assert f"Getting validity time of a lock {self.lockname} failed with error code: -10" in str(excinfo.value)
 
     def test_redis_backend_lock_object_string_representation(self):
-        expected_lock_info = {'lock namespace': 'some-ns',
+        expected_lock_info = {'lock DB type': 'Redis',
+                              'lock namespace': 'some-ns',
                               'lock name': 'some-lock-name',
                               'lock status': 'locked'}
         assert str(self.lock) == str(expected_lock_info)
 
     def test_redis_backend_lock_object_string_representation_can_catch_redis_exception(self):
         self.mock_redis_lock.owned.side_effect = redis_exceptions.LockError('redis lock error!')
-        expected_lock_info = {'lock namespace': 'some-ns',
+        expected_lock_info = {'lock DB type': 'Redis',
+                              'lock namespace': 'some-ns',
                               'lock name': 'some-lock-name',
                               'lock status': 'Error: redis lock error!'}
         assert str(self.lock) == str(expected_lock_info)

@@ -69,7 +69,9 @@ class SyncLock(SyncLockAbc):
                  storage: 'SyncStorage') -> None:
 
         super().__init__(ns, name, expiration)
-        self.__dbbackendlock = ricsdl.backend.get_backend_lock_instance(ns, name, expiration,
+        self.__configuration = storage.get_configuration()
+        self.__dbbackendlock = ricsdl.backend.get_backend_lock_instance(self.__configuration,
+                                                                        ns, name, expiration,
                                                                         storage.get_backend())
 
     def __str__(self):
@@ -107,11 +109,16 @@ class SyncStorage(SyncStorageAbc):
     a namespace, namespace identifier is passed as a parameter to all the operations.
 
     Args:
-        None
+        fake_db_backend (str): Optional parameter. Parameter enables fake DB backend usage for an
+                               SDL instance. Fake DB backend is ONLY allowed to use for testing
+                               purposes at development phase of SDL clients when more advanced
+                               database services are not necessarily needed. Currently value 'dict'
+                               is only allowed value for the parameter, which enables dictionary
+                               type of fake DB backend.
     """
-    def __init__(self) -> None:
+    def __init__(self, fake_db_backend=None) -> None:
         super().__init__()
-        self.__configuration = _Configuration()
+        self.__configuration = _Configuration(fake_db_backend)
         self.__dbbackend = ricsdl.backend.get_backend_instance(self.__configuration)
 
     def __del__(self):
@@ -199,3 +206,7 @@ class SyncStorage(SyncStorageAbc):
     def get_backend(self) -> DbBackendAbc:
         """Return backend instance."""
         return self.__dbbackend
+
+    def get_configuration(self) -> _Configuration:
+        """Return configuration what was valid when the SDL instance was initiated."""
+        return self.__configuration

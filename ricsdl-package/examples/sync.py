@@ -73,6 +73,11 @@ def _try_func_return(func):
 # Creates SDL instance. The call creates connection to the SDL database backend.
 mysdl = _try_func_return(SyncStorage)
 
+# Creates SDL instance what utilizes a fake database backend. Fake database is meant to
+# be used only at development phase of SDL clients. It does not provide more advanced
+# database services.
+# mysdl = _try_func_return(lambda: SyncStorage(fake_db_backend='dict'))
+
 
 # Sets a value 'my_value' for a key 'my_key' under given namespace. Note that value
 # type must be bytes and multiple key values can be set in one set function call.

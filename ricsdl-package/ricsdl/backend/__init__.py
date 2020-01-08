@@ -22,15 +22,19 @@
 """Shared Data Layer (SDL) database backend module."""
 
 from importlib import import_module
+from ricsdl.configuration import DbBackendType
 
 
 def get_backend_instance(configuration):
     """
     Select database backend solution and return and instance of it.
-    For now only Redis backend solution is supported.
     """
-    backend_name = 'RedisBackend'
-    backend_module_name = 'redis'
+    if configuration.get_params().db_type == DbBackendType.FAKE_DICT:
+        backend_name = 'FakeDictBackend'
+        backend_module_name = 'fake_dict_db'
+    else:
+        backend_name = 'RedisBackend'
+        backend_module_name = 'redis'
 
     package = __package__ or __name__
     backend_module = import_module('.' + backend_module_name, package=package)
@@ -39,13 +43,16 @@ def get_backend_instance(configuration):
     return instance
 
 
-def get_backend_lock_instance(ns, name, expiration, backend):
+def get_backend_lock_instance(configuration, ns, name, expiration, backend):
     """
     Select database backend lock solution and return and instance of it.
-    For now only Redis backend lock solution is supported.
     """
-    backend_lock_name = 'RedisBackendLock'
-    backend_module_name = 'redis'
+    if configuration.get_params().db_type == DbBackendType.FAKE_DICT:
+        backend_lock_name = 'FakeDictBackendLock'
+        backend_module_name = 'fake_dict_db'
+    else:
+        backend_lock_name = 'RedisBackendLock'
+        backend_module_name = 'redis'
 
     package = __package__ or __name__
     backend_module = import_module('.' + backend_module_name, package=package)
