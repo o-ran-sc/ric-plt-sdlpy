@@ -87,6 +87,24 @@
       "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3baaf5a_07532aa2",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-09T12:11:26Z",
+      "side": 1,
+      "message": "Thanks Tommy for the comment.\nI think SDL client should not make decision what is the *real* SDL database type (Redis or MariaDB for example), selection should be hidden inside SDL implementation and decision making should be based on how DBAAS service has been deployed to the system.\n\nHowever I can try to change the code so that SDL client can \u0027activate\u0027 *fake* DB usage when it is initiating SDL instance by using optional parameter (allowed values None, dict) for the constructor. Something like this:\ndef __init__(Self, fake_backend\u003dNone)\nSo this implementation would replace USE_FAKE_DBAAS env variable usage.\nWhat do you think about this solution?",
+      "parentUuid": "33085dad_e1ef6271",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
