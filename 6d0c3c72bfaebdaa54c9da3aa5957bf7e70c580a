@@ -69,6 +69,24 @@
       "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33085dad_e1ef6271",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-09T11:20:50Z",
+      "side": 1,
+      "message": "one suggestion: the most natural solution to me was in the constructor. to be honest I find this use of an ENV variable strange and difficult to add more combos of.\n\nconstructor as in in the __init__ for SyncStorage like\n\nclass SyncStorage\n  def __init__(Self, backend\u003dredis):\n       # some check that backend is valid eg backend in {\"redis\", \"dict\", \"maria\"}\n       self.backend\u003dbackend\n\nthen the client does sdl \u003d SyncStorage(backend\u003ddict) \n\nthe default could be redis",
+      "parentUuid": "3b3805a7_3c55bc86",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
