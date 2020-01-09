@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a28c56d_dae27456",
+        "filename": "ricsdl-package/ricsdl/backend/fake_db.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-09T05:40:45Z",
+      "side": 1,
+      "message": "You set USE_FAKE_DBAAS environment variable to true in your testing env before you initiate an SDL instance in there.",
+      "parentUuid": "f936765b_a6c789dd",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7cfb1bb_6637c252",
         "filename": "ricsdl-package/ricsdl/configuration.py",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-08T19:05:09Z",
       "side": 1,
       "message": "I see, so this env variable switches the backend? So we instantiate syncstorage as normal, but set an ENV variable in the testing env?",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b3805a7_3c55bc86",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-09T05:40:45Z",
+      "side": 1,
+      "message": "Yes, before initiating SDL instance you set USE_FAKE_DBAAS environment variable. When SDL instance is instantiated, SDL implementation takes either fake or a \u0027real\u0027 Redis backend into use and decision is made based on this USE_FAKE_DBAAS variable value (True \u003d\u003d \u0027use fake\u0027, False/not set \u003d\u003d \u0027use Redis\u0027).\n\nI would like to hear comments/ideas from reviewers if there is better way to tell to SDL what DB backend it should use. I selected environment variable usage here, because we use env variables to configure the real DB backend connection too, this way I didn\u0027t need to do any major code changes either. I think, what ever way we select SDL DB backend, we should avoid possibility that a user of SDL *accidentally* uses fake DB backend instead of the real one. To avoid this I added a crosschecking between USE_FAKE_DBAAS and DBAAS_SERVICE_HOST: SDL throws ValueError if both variables are set but is this enough or should we just instantiate SyncStorage with some optional \u0027testing\u0027 flag and we pass that flag to the backend selection logic in SDL and selection is based only on flag\u0027s value?\nWhat if in the future we get another real DB type (MariaDB for example) how we select then SDL backend type, based on env variable value maybe...",
+      "parentUuid": "a7cfb1bb_6637c252",
       "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
