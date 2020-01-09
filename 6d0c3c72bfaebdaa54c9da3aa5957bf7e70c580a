@@ -105,6 +105,24 @@
       "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bfc6c95_33788446",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-09T12:25:42Z",
+      "side": 1,
+      "message": "ah I see, I misunderstood. So your point is that the backend is actually chosen by the system and cannot be chosen by the client.\n\nI think the fake_backend is a good solution for testing. I\u0027m fine with what you have too, in this case I don\u0027t think the difference is huge, probably a very slight preference for the init way/.",
+      "parentUuid": "f3baaf5a_07532aa2",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
