@@ -141,6 +141,24 @@
       "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80b0ad2f_72891b2b",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-09T13:53:20Z",
+      "side": 1,
+      "message": "no rush; I\u0027m hoping you release 2.0.1 (This version) by Monday, and I will upgrade from SDL v1 to 2.0.1 on Monday/next week. I have some other stuff in the meantime.",
+      "parentUuid": "0272b485_dc9057a1",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
