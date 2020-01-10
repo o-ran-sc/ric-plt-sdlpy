@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6423403_d374988e",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000074
+      },
+      "writtenOn": "2020-01-10T14:37:03Z",
+      "side": 1,
+      "message": "why isn\u0027t fake db backend just a boolean? Are there other things coming than dict?\n\nAlso the error message below is cut off at the end after \"wrong\"",
+      "revId": "598ca39173733260e0920b6477cd9965920278f1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
