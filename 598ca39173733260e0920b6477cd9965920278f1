@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cfcbc670_c15825ed",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-10T16:42:27Z",
+      "side": 1,
+      "message": "I\u0027m not aware of need for other fake db endpoint types but I though that in open source project someone else might invent some other fake db type, for example simple txt file. Thant\u0027s why I thought it would be better to implement already now solution what can be more easily extent in the future.\n\nI triggered exception throwing with example code and ValueError message was shown correctly in the same line:\n  File \"/mnt/rcp/workspace/RIC/sdlpy/ricsdl-package/ricsdl/configuration.py\", line 67, in _read_configuration\n    raise ValueError(msg)\nValueError: Configuration error: SDL instance was initiated with wrong \u0027fake_db_backend\u0027 argument value: file. Value \u0027dict\u0027 is only supported.",
+      "parentUuid": "f6423403_d374988e",
+      "revId": "598ca39173733260e0920b6477cd9965920278f1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8edb6223_eb95c378",
         "filename": "ricsdl-package/ricsdl/syncstorage.py",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-10T14:37:42Z",
       "side": 1,
       "message": "would be simpler to just make this a boolean, unless you forsee other than dict",
+      "revId": "598ca39173733260e0920b6477cd9965920278f1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6364581a_dcd3d60c",
+        "filename": "ricsdl-package/ricsdl/syncstorage.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-10T16:42:27Z",
+      "side": 1,
+      "message": "I\u0027m not aware of need for other fake db endpoint types but I though that in open source project someone else might invent some other fake db type, for example simple txt file. Thant\u0027s why I thought it would be better to implement already now solution what can be more easily extent in the future.",
+      "parentUuid": "8edb6223_eb95c378",
       "revId": "598ca39173733260e0920b6477cd9965920278f1",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
