@@ -159,6 +159,24 @@
       "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27c85987_e0fe26c8",
+        "filename": "ricsdl-package/ricsdl/configuration.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-01-10T08:54:19Z",
+      "side": 1,
+      "message": "Fake DB backend selection code change is in PatchSet #2.",
+      "parentUuid": "80b0ad2f_72891b2b",
+      "revId": "6d0c3c72bfaebdaa54c9da3aa5957bf7e70c580a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
     }
   ]
 }
