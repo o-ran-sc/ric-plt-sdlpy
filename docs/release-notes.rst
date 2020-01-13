@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.0.2] - 2020-01-14
+
+* Version bump.
+
 [2.0.1] - 2020-01-13
 
 * Add a fake database backend implementation to be used only for testing
