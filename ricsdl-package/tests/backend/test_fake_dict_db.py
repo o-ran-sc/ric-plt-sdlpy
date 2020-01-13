@@ -31,9 +31,11 @@ def fake_dict_backend_fixture(request):
     request.cls.ns = 'some-ns'
     request.cls.dm = {'abc': b'1', 'bcd': b'2'}
     request.cls.new_dm = {'abc': b'3', 'bcd': b'2'}
+    request.cls.dm2 = {'cdf': b'4'}
     request.cls.remove_dm = {'bcd': b'2'}
     request.cls.key = 'abc'
     request.cls.keys = ['abc', 'bcd']
+    request.cls.key2 = ['cdf']
     request.cls.old_data = b'1'
     request.cls.new_data = b'3'
     request.cls.keypattern = r'*bc*'
@@ -57,8 +59,11 @@ def fake_dict_backend_fixture(request):
 class TestFakeDictBackend:
     def test_set_function_success(self):
         self.db.set(self.ns, self.dm)
+        self.db.set(self.ns, self.dm2)
         ret = self.db.get(self.ns, self.keys)
         assert ret == self.dm
+        ret = self.db.get(self.ns, self.key2)
+        assert ret == self.dm2
 
     def test_set_if_function_success(self):
         self.db.set(self.ns, self.dm)

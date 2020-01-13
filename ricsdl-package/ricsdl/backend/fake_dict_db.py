@@ -55,7 +55,7 @@ class FakeDictBackend(DbBackendAbc):
         pass
 
     def set(self, ns: str, data_map: Dict[str, bytes]) -> None:
-        self._db = data_map.copy()
+        self._db.update(data_map.copy())
 
     def set_if(self, ns: str, key: str, old_data: bytes, new_data: bytes) -> bool:
         if key not in self._db:
