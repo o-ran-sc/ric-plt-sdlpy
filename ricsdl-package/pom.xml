@@ -26,13 +26,13 @@ platform project (RICP).
   <version>0</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.sources>ricsdl-package</sonar.sources>
+    <sonar.sources>.</sonar.sources>
     <sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
     <sonar.python.coverage.reportPaths>coverage.xml</sonar.python.coverage.reportPaths>
     <sonar.python.xunit.reportPath>xunit-results.xml</sonar.python.xunit.reportPath>
     <sonar.language>py</sonar.language>
     <sonar.pluginname>python</sonar.pluginname>
-    <sonar.inclusions>ricsdl-package/*.py</sonar.inclusions>
-    <sonar.exclusions>ricsdl-package/tests/*,setup.py</sonar.exclusions>
+    <sonar.inclusions>*.py</sonar.inclusions>
+    <sonar.exclusions>tests/*,setup.py</sonar.exclusions>
   </properties>
 </project>
