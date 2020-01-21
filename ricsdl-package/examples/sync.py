@@ -78,6 +78,11 @@ mysdl = _try_func_return(SyncStorage)
 # database services.
 # mysdl = _try_func_return(lambda: SyncStorage(fake_db_backend='dict'))
 
+# Checks if SDL is operational. Note that it is not necessary to call `is_active()` after each
+# SDL instance creation. Below example is here just to show how to call it spontaneously
+# when SDL healthiness is needed to check.
+is_active = mysdl.is_active()
+assert is_active is True
 
 # Sets a value 'my_value' for a key 'my_key' under given namespace. Note that value
 # type must be bytes and multiple key values can be set in one set function call.

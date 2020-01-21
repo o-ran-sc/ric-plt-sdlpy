@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.0.3] - 2020-01-22
+
+* Add a new SDL storage API function `is_active()` to check healthiness of SDL instance.
+
 [2.0.2] - 2020-01-14
 
 * Version bump.

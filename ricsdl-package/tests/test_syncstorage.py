@@ -24,7 +24,7 @@ import pytest
 from ricsdl.syncstorage import SyncStorage
 from ricsdl.syncstorage import SyncLock
 from ricsdl.syncstorage import func_arg_checker
-from ricsdl.exceptions import SdlTypeError
+from ricsdl.exceptions import (SdlTypeError, NotConnected)
 
 
 @pytest.fixture()
@@ -53,6 +53,18 @@ def sync_storage_fixture(request):
 
 @pytest.mark.usefixtures('sync_storage_fixture')
 class TestSyncStorage:
+    def test_is_active_function_success(self):
+        self.mock_db_backend.is_connected.return_value = True
+        ret = self.storage.is_active()
+        self.mock_db_backend.is_connected.assert_called_once()
+        assert ret is True
+
+    def test_is_active_function_can_catch_backend_exception_and_return_false(self):
+        self.mock_db_backend.is_connected.side_effect = NotConnected
+        ret = self.storage.is_active()
+        self.mock_db_backend.is_connected.assert_called_once()
+        assert ret is False
+
     def test_set_function_success(self):
         self.storage.set(self.ns, self.dm)
         self.mock_db_backend.set.assert_called_once_with(self.ns, self.dm)

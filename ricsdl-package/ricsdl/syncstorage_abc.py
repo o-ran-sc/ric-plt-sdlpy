@@ -171,6 +171,24 @@ class SyncStorageAbc(ABC):
     """
 
     @abstractmethod
+    def is_active(self):
+        """
+        Verify SDL storage healthiness.
+
+        Verify SDL connection to the backend data storage.
+
+        Args:
+            None
+
+        Returns:
+            bool: True if SDL is operational, false otherwise.
+
+        Raises:
+            None
+        """
+        pass
+
+    @abstractmethod
     def close(self):
         """
         Close the connection to SDL storage.

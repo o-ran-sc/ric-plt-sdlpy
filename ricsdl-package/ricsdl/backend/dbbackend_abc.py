@@ -29,6 +29,11 @@ class DbBackendAbc(ABC):
     """An abstract Shared Data Layer (SDL) class providing database backend interface."""
 
     @abstractmethod
+    def is_connected(self):
+        """Test database backend connection."""
+        pass
+
+    @abstractmethod
     def close(self):
         """Close database backend connection."""
         pass
