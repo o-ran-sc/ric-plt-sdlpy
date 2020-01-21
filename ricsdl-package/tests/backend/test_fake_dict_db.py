@@ -57,6 +57,10 @@ def fake_dict_backend_fixture(request):
 
 @pytest.mark.usefixtures('fake_dict_backend_fixture')
 class TestFakeDictBackend:
+    def test_is_connected_function_success(self):
+        ret = self.db.is_connected()
+        assert ret is True
+
     def test_set_function_success(self):
         self.db.set(self.ns, self.dm)
         self.db.set(self.ns, self.dm2)

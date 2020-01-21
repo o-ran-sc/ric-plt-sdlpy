@@ -25,7 +25,7 @@ from ricsdl.configuration import _Configuration
 from ricsdl.syncstorage_abc import (SyncStorageAbc, SyncLockAbc)
 import ricsdl.backend
 from ricsdl.backend.dbbackend_abc import DbBackendAbc
-from ricsdl.exceptions import SdlTypeError
+from ricsdl.exceptions import (SdlException, SdlTypeError)
 
 
 def func_arg_checker(exception, start_arg_idx, **types):
@@ -131,6 +131,12 @@ class SyncStorage(SyncStorageAbc):
                 "backend": str(self.__dbbackend)
             }
         )
+
+    def is_ready(self):
+        try:
+            return self.__dbbackend.is_connected()
+        except SdlException:
+            return False
 
     def close(self):
         self.__dbbackend.close()

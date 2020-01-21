@@ -51,6 +51,9 @@ class FakeDictBackend(DbBackendAbc):
             }
         )
 
+    def is_connected(self):
+        return True
+
     def close(self):
         pass
 

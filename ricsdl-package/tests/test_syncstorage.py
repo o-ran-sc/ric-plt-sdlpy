@@ -53,6 +53,12 @@ def sync_storage_fixture(request):
 
 @pytest.mark.usefixtures('sync_storage_fixture')
 class TestSyncStorage:
+    def test_is_ready_function_success(self):
+        self.mock_db_backend.is_connected.return_value = True
+        ret = self.storage.is_ready()
+        self.mock_db_backend.is_connected.assert_called_once()
+        assert ret is True
+
     def test_set_function_success(self):
         self.storage.set(self.ns, self.dm)
         self.mock_db_backend.set.assert_called_once_with(self.ns, self.dm)

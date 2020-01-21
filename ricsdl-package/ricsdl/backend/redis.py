@@ -90,6 +90,10 @@ class RedisBackend(DbBackendAbc):
             }
         )
 
+    def is_connected(self):
+        with _map_to_sdl_exception():
+            return self.__redis.ping()
+
     def close(self):
         self.__redis.close()
 

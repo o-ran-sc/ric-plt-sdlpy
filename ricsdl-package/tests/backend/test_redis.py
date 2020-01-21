@@ -72,6 +72,18 @@ def redis_backend_fixture(request):
 
 @pytest.mark.usefixtures('redis_backend_fixture')
 class TestRedisBackend:
+    def test_is_connected_function_success(self):
+        self.mock_redis.ping.return_value = True
+        ret = self.db.is_connected()
+        self.mock_redis.ping.assert_called_once()
+        assert ret is True
+
+    def test_is_connected_function_returns_false_if_ping_fails(self):
+        self.mock_redis.ping.return_value = False
+        ret = self.db.is_connected()
+        self.mock_redis.ping.assert_called_once()
+        assert ret is False
+
     def test_set_function_success(self):
         self.db.set(self.ns, self.dm)
         self.mock_redis.mset.assert_called_once_with(self.dm_redis)
