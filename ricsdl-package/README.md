@@ -57,7 +57,7 @@ Usage
 
 Instructions how to use SDL can be found from O-RAN Software Community (SC)
 Documentation under Near Realtime RAN Intelligent Controller (RIC) section:
-[O-RAN SC Documentation Home](https://docs.o-ran-sc.org/en/latest/)
+[O-RAN SC Documentation Home](https://docs.o-ran-sc.org/projects/o-ran-sc-ric-plt-sdl/en/latest/)
 
 
 Unit Testing
