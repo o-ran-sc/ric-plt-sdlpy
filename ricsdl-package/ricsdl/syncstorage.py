@@ -143,6 +143,7 @@ class SyncStorage(SyncStorageAbc):
 
     @func_arg_checker(SdlTypeError, 1, ns=str, data_map=dict)
     def set(self, ns: str, data_map: Dict[str, bytes]) -> None:
+        self._validate_key_value_dict(data_map)
         self.__dbbackend.set(ns, data_map)
 
     @func_arg_checker(SdlTypeError, 1, ns=str, key=str, old_data=bytes, new_data=bytes)
@@ -216,3 +217,11 @@ class SyncStorage(SyncStorageAbc):
     def get_configuration(self) -> _Configuration:
         """Return configuration what was valid when the SDL instance was initiated."""
         return self.__configuration
+
+    @classmethod
+    def _validate_key_value_dict(cls, kv):
+        for k, v in kv.items():
+            if not isinstance(k, str):
+                raise SdlTypeError(r"Wrong dict key type: {}={}. Must be: str".format(k, type(k)))
+            if not isinstance(v, bytes):
+                raise SdlTypeError(r"Wrong dict value type: {}={}. Must be: bytes".format(v, type(v)))

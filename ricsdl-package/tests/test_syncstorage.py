@@ -74,6 +74,10 @@ class TestSyncStorage:
             self.storage.set(123, {'a': b'v1'})
         with pytest.raises(SdlTypeError):
             self.storage.set('ns', [1, 2])
+        with pytest.raises(SdlTypeError):
+            self.storage.set('ns', {0xbad: b'v1'})
+        with pytest.raises(SdlTypeError):
+            self.storage.set('ns', {'a': 0xbad})
 
     def test_set_if_function_success(self):
         self.mock_db_backend.set_if.return_value = True
