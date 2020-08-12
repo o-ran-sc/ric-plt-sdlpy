@@ -18,7 +18,8 @@
 # platform project (RICP).
 #
 
-
+import queue
+import time
 from unittest.mock import Mock
 import pytest
 import ricsdl.backend
@@ -44,6 +45,8 @@ def fake_dict_backend_fixture(request):
     request.cls.groupmembers = set([b'm1', b'm2'])
     request.cls.new_groupmembers = set(b'm3')
     request.cls.all_groupmembers = request.cls.groupmembers | request.cls.new_groupmembers
+    request.cls.channels = ['abs', 'gma']
+    request.cls.channels_and_events = {'abs': ['cbn']}
 
     request.cls.configuration = Mock()
     mock_conf_params = _Configuration.Params(db_host=None,
@@ -170,6 +173,148 @@ class TestFakeDictBackend:
 
     def test_fake_dict_backend_object_string_representation(self):
         assert str(self.db) == str({'DB type': 'FAKE DB'})
+
+    def test_set_and_publish_function_success(self):
+        self.db.set_and_publish(self.ns, self.channels_and_events, self.dm)
+        ret = self.db.get(self.ns, self.keys)
+        assert ret == self.dm
+        assert self.db._queue.qsize() == 1
+
+    def test_set_if_and_publish_success(self):
+        self.db.set(self.ns, self.dm)
+        ret = self.db.set_if_and_publish(self.ns, self.channels_and_events, self.key, self.old_data,
+                                         self.new_data)
+        assert ret is True
+        ret = self.db.get(self.ns, self.keys)
+        assert ret == self.new_dm
+        assert self.db._queue.qsize() == 1
+
+    def test_set_if_and_publish_returns_false_if_existing_key_value_not_expected(self):
+        self.db.set_if_and_publish(self.ns, self.channels_and_events, self.key, self.old_data,
+                                   self.new_data)
+        self.db.set(self.ns, self.new_dm)
+        ret = self.db.set_if(self.ns, self.key, self.old_data, self.new_data)
+        assert ret is False
+        assert self.db._queue.qsize() == 0
+
+    def test_set_if_not_exists_and_publish_success(self):
+        ret = self.db.set_if_not_exists_and_publish(self.ns, self.channels_and_events, self.key,
+                                                    self.new_data)
+        assert ret is True
+        ret = self.db.get(self.ns, self.keys)
+        assert ret == {self.key: self.new_data}
+        assert self.db._queue.qsize() == 1
+
+    def test_set_if_not_exists_and_publish_returns_false_if_key_already_exists(self):
+        self.db.set(self.ns, self.dm)
+        ret = self.db.set_if_not_exists_and_publish(self.ns, self.channels_and_events, self.key,
+                                                    self.new_data)
+        assert ret is False
+        assert self.db._queue.qsize() == 0
+
+    def test_remove_and_publish_function_success(self):
+        self.db.set(self.ns, self.dm)
+        self.db.remove_and_publish(self.ns, self.channels_and_events, self.keys)
+        ret = self.db.get(self.ns, self.keys)
+        assert ret == dict()
+        assert self.db._queue.qsize() == 1
+
+    def test_remove_if_and_publish_success(self):
+        self.db.set(self.ns, self.dm)
+        ret = self.db.remove_if_and_publish(self.ns, self.channels_and_events, self.key,
+                                            self.old_data)
+        assert ret is True
+        ret = self.db.get(self.ns, self.keys)
+        assert ret == self.remove_dm
+        assert self.db._queue.qsize() == 1
+
+    def test_remove_if_and_publish_returns_false_if_data_does_not_match(self):
+        ret = self.db.remove_if_and_publish(self.ns, self.channels_and_events, self.key,
+                                            self.old_data)
+        assert ret is False
+        self.db.set(self.ns, self.dm)
+        ret = self.db.remove_if_and_publish(self.ns, self.channels_and_events, self.key,
+                                            self.new_data)
+        assert ret is False
+        assert self.db._queue.qsize() == 0
+
+    def test_remove_all_publish_success(self):
+        self.db.set(self.ns, self.dm)
+        self.db.remove_all_and_publish(self.ns, self.channels_and_events)
+        ret = self.db.get(self.ns, self.keys)
+        assert ret == dict()
+        assert self.db._queue.qsize() == 1
+
+    def test_subscribe_channel_success(self):
+        cb = Mock()
+        self.db.subscribe_channel(self.ns, cb, self.channels)
+        for channel in self.channels:
+            assert self.db._channel_cbs.get(channel, None)
+        assert not self.db._listen_thread.is_alive()
+
+    def test_subscribe_channel_event_loop_success(self):
+        cb = Mock()
+        self.db.start_event_listener()
+        self.db.subscribe_channel(self.ns, cb, self.channels)
+        for channel in self.channels:
+            assert self.db._channel_cbs.get(channel, None)
+        assert self.db._listen_thread.is_alive()
+
+    def test_unsubscribe_channel_success(self):
+        self.db.subscribe_channel(self.ns, Mock(), self.channels)
+        self.db.unsubscribe_channel(self.ns, [self.channels[0]])
+        assert self.db._channel_cbs.get(self.channels[0], None) is None
+        assert self.db._channel_cbs.get(self.channels[1], None)
+
+    def test_listen(self):
+        cb = Mock()
+        self.db.start_event_listener()
+        self.db.subscribe_channel(self.ns, cb, self.channels)
+        self.db._queue.put(("abs", "cbn"))
+        time.sleep(0.5)
+        assert self.db._queue.qsize() == 0
+
+    def test_start_event_listener_success(self):
+        self.db.start_event_listener()
+        assert self.db._run_in_thread
+
+    def test_start_event_listener_subscribe_first(self):
+        self.db._listen_thread.start = Mock()
+        mock_cb = Mock()
+        self.db._channel_cbs = {'abs': mock_cb}
+        self.db.subscribe_channel(self.ns, Mock(), self.channels)
+        self.db.start_event_listener()
+        self.db._listen_thread.start.assert_called_once()
+
+    def test_start_event_listener_fail(self):
+        self.db._listen_thread.is_alive = Mock()
+        self.db._listen_thread.is_alive.return_value = True
+        with pytest.raises(Exception):
+            self.db.start_event_listener()
+
+    def test_handle_events_success(self):
+        self.db._queue = Mock()
+        self.db._queue.get.return_value = ('abs', 'cbn')
+        mock_cb = Mock()
+        self.db._channel_cbs = {'abs': mock_cb}
+        assert self.db.handle_events() == ('abs', 'cbn')
+        mock_cb.assert_called_once_with('abs', 'cbn')
+
+    def test_handle_events_success_no_notification(self):
+        self.db._queue = Mock()
+        self.db._queue.get.side_effect = queue.Empty
+        assert self.db.handle_events() is None
+
+    def test_handle_events_fail_already_started(self):
+        self.db._listen_thread = Mock()
+        self.db._listen_thread.is_alive.return_value = True
+        with pytest.raises(Exception):
+            self.db.handle_events()
+
+    def test_handle_events_fail_already_set(self):
+        self.db._run_in_thread = True
+        with pytest.raises(Exception):
+            self.db.handle_events()
 
 @pytest.fixture()
 def fake_dict_backend_lock_fixture(request):

@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.1.0] - 2020-08-26
+
+* Add support for notifications
+
 [2.0.4] - 2020-05-13
 
 * Enhance SDL API set() function argument validation to cover also dictionary items.
@@ -136,5 +140,3 @@ Workarounds
 
 References
 ----------
-
-

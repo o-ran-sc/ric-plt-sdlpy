@@ -21,7 +21,7 @@
 
 """The module provides Shared Data Layer (SDL) database backend interface."""
 
-from typing import (Dict, Set, List, Union)
+from typing import (Callable, Dict, Set, List, Optional, Tuple, Union)
 from abc import ABC, abstractmethod
 
 
@@ -112,6 +112,83 @@ class DbBackendAbc(ABC):
     @abstractmethod
     def group_size(self, ns: str, group: str) -> int:
         """Return the number of members in a group under a namespace in database."""
+        pass
+
+    @abstractmethod
+    def set_and_publish(self, ns: str, channels_and_events: Dict[str, List[str]],
+                        data_map: Dict[str, bytes]) -> None:
+        """Publish event to channel after writing data."""
+        pass
+
+    @abstractmethod
+    def set_if_and_publish(self, ns: str, channels_and_events: Dict[str, List[str]], key: str,
+                           old_data: bytes, new_data: bytes) -> bool:
+        """
+        Publish event to channel after writing key value to database under a namespace
+        if the old value is expected one.
+        """
+        pass
+
+    @abstractmethod
+    def set_if_not_exists_and_publish(self, ns: str, channels_and_events: Dict[str, List[str]],
+                                      key: str, data: bytes) -> bool:
+        """"
+        Publish event to channel after writing key value to database under a namespace if
+        key doesn't exist.
+        """
+        pass
+
+    @abstractmethod
+    def remove_and_publish(self, ns: str, channels_and_events: Dict[str, List[str]],
+                           keys: List[str]) -> None:
+        """Publish event to channel after removing data."""
+        pass
+
+    @abstractmethod
+    def remove_if_and_publish(self, ns: str, channels_and_events: Dict[str, List[str]], key: str,
+                              data: bytes) -> bool:
+        """
+        Publish event to channel after removing key and its data from database if the
+        current data value is expected one.
+        """
+        pass
+
+    @abstractmethod
+    def remove_all_and_publish(self, ns: str, channels_and_events: Dict[str, List[str]]) -> None:
+        """
+        Publish event to channel after removing all keys in namespace.
+        """
+        pass
+
+    @abstractmethod
+    def subscribe_channel(self, ns: str, cb: Callable[[str, str], None],
+                          channels: List[str]) -> None:
+        """
+        This takes a callback function and one or many channels to be subscribed.
+        When an event is received for the given channel, the given callback function
+        shall be called with channel and notifications as parameter.
+        """
+        pass
+
+    @abstractmethod
+    def unsubscribe_channel(self, ns: str, channels: List[str]) -> None:
+        """Unsubscribes from channel and removes set callback function."""
+        pass
+
+    @abstractmethod
+    def start_event_listener(self) -> None:
+        """
+        start_event_listener creates an event loop in a separate thread for handling
+        notifications from subscriptions.
+        """
+        pass
+
+    @abstractmethod
+    def handle_events(self) -> Optional[Tuple[str, str]]:
+        """
+        handle_events is a non-blocking function that returns a tuple containing channel
+        name and message received from notification.
+        """
         pass
 
 
