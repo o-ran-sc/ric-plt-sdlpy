@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec125641_fe951570",
+        "filename": "releases/pypi-ricsdl.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2020-08-26T07:06:26Z",
+      "side": 1,
+      "message": "Change 1 --\u003e 2 to be in line with the correct jenkins job runner logs",
+      "revId": "ce6f9459ab47107235955c6e74f3f0170a1ef773",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53",
+      "unresolved": true
+    }
+  ]
+}
