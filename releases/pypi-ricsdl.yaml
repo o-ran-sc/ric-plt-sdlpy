@@ -1,5 +1,5 @@
 ---
 pypi_project: ricsdl
 python_version: '3.7'
-version: 2.0.4
-log_dir: ric-plt-sdlpy-pypi-stage-master/1
+version: 2.1.0
+log_dir: ric-plt-sdlpy-pypi-stage-master/2
