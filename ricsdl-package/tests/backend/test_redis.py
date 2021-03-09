@@ -340,7 +340,7 @@ class TestRedisBackend:
         self.mock_redis.execute_command.return_value = b"OK"
         ret = self.db.set_if_and_publish(self.ns, self.channels_and_events, self.key, self.old_data,
                                          self.new_data)
-        self.mock_redis.execute_command.assert_called_once_with('SETIEPUB', self.key_redis,
+        self.mock_redis.execute_command.assert_called_once_with('SETIEMPUB', self.key_redis,
                                                                 self.new_data, self.old_data,
                                                                 *self.channels_and_events_redis)
         assert ret is True
@@ -349,7 +349,7 @@ class TestRedisBackend:
         self.mock_redis.execute_command.return_value = None
         ret = self.db.set_if_and_publish(self.ns, self.channels_and_events, self.key, self.old_data,
                                          self.new_data)
-        self.mock_redis.execute_command.assert_called_once_with('SETIEPUB', self.key_redis,
+        self.mock_redis.execute_command.assert_called_once_with('SETIEMPUB', self.key_redis,
                                                                 self.new_data, self.old_data,
                                                                 *self.channels_and_events_redis)
         assert ret is False
@@ -364,7 +364,7 @@ class TestRedisBackend:
         self.mock_redis.execute_command.return_value = b"OK"
         ret = self.db.set_if_not_exists_and_publish(self.ns, self.channels_and_events, self.key,
                                                     self.new_data)
-        self.mock_redis.execute_command.assert_called_once_with('SETNXPUB', self.key_redis,
+        self.mock_redis.execute_command.assert_called_once_with('SETNXMPUB', self.key_redis,
                                                                 self.new_data,
                                                                 *self.channels_and_events_redis)
         assert ret is True
@@ -373,7 +373,7 @@ class TestRedisBackend:
         self.mock_redis.execute_command.return_value = None
         ret = self.db.set_if_not_exists_and_publish(self.ns, self.channels_and_events, self.key,
                                                     self.new_data)
-        self.mock_redis.execute_command.assert_called_once_with('SETNXPUB', self.key_redis,
+        self.mock_redis.execute_command.assert_called_once_with('SETNXMPUB', self.key_redis,
                                                                 self.new_data,
                                                                 *self.channels_and_events_redis)
         assert ret is False
@@ -395,7 +395,7 @@ class TestRedisBackend:
         self.mock_redis.execute_command.return_value = 1
         ret = self.db.remove_if_and_publish(self.ns, self.channels_and_events, self.key,
                                             self.new_data)
-        self.mock_redis.execute_command.assert_called_once_with('DELIEPUB', self.key_redis,
+        self.mock_redis.execute_command.assert_called_once_with('DELIEMPUB', self.key_redis,
                                                                 self.new_data,
                                                                 *self.channels_and_events_redis)
         assert ret is True
@@ -404,7 +404,7 @@ class TestRedisBackend:
         self.mock_redis.execute_command.return_value = 0
         ret = self.db.remove_if_and_publish(self.ns, self.channels_and_events, self.key,
                                             self.new_data)
-        self.mock_redis.execute_command.assert_called_once_with('DELIEPUB', self.key_redis,
+        self.mock_redis.execute_command.assert_called_once_with('DELIEMPUB', self.key_redis,
                                                                 self.new_data,
                                                                 *self.channels_and_events_redis)
         assert ret is False

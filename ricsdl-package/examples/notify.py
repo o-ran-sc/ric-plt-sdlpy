@@ -23,11 +23,11 @@ Execution of  these examples requires:
  * Following Redis extension commands have been installed to runtime environment:
    - MSETPUB
    - SETIE
-   - SETIEPUB
-   - SETNXPUB
-   - DELPUB
+   - SETIEMPUB
+   - SETNXMPUB
+   - DELMPUB
    - DELIE
-   - DELIEPUB
+   - DELIEMPUB
    Redis v4.0 or greater is required. Older versions do not support extension modules.
    Implementation of above commands is produced by RIC DBaaS:
    https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/dbaas
@@ -134,6 +134,9 @@ def listen_thread():
             pass
         time.sleep(0.001)
 
+# Subscribe to MY_CHANNEL. We expect that anytime we receive a message in the
+# channel, cb function will be called.
+_try_func_return(lambda: mysdl.subscribe_channel(MY_NS, cb, MY_CHANNEL))
 
 # As mentioned above, there are two available methods for applications to
 # handle notifications
@@ -142,10 +145,6 @@ if EVENT_LISTENER:
 else:
     thread = threading.Thread(target=listen_thread)
     thread.start()
-
-# Subscribe to MY_CHANNEL. We expect that anytime we receive a message in the
-# channel, cb function will be called.
-_try_func_return(lambda: mysdl.subscribe_channel(MY_NS, cb, MY_CHANNEL))
 
 # Sets a value 'my_value' for a key 'my_key' under given namespace. Note that value
 # type must be bytes and multiple key values can be set in one set function call.
