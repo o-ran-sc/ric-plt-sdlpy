@@ -37,7 +37,11 @@ database is used as a backend data storage solution.
 
 Notifications
 
-Notifications functionality provide SDL clients the possibility to receive notifications about data changes in SDL namespaces. SDL client receiving notifications about data changes is referred to as "subscriber", while the SDL client modifying data and publishing notifications is referred to as "publisher".
+Notifications functionality provide SDL clients the possibility to receive
+notifications about data changes in SDL namespaces. SDL client receiving
+notifications about data changes is referred to as "subscriber", while the SDL
+client modifying data and publishing notifications is referred to as
+"publisher".
 
 Install
 -------

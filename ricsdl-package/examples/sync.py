@@ -25,11 +25,11 @@ Execution of  these examples requires:
  * Following Redis extension commands have been installed to runtime environment:
    - MSETPUB
    - SETIE
-   - SETIEPUB
-   - SETNXPUB
-   - DELPUB
+   - SETIEMPUB
+   - SETNXMPUB
+   - DELMPUB
    - DELIE
-   - DELIEPUB
+   - DELIEMPUB
    Redis v4.0 or greater is required. Older versions do not support extension modules.
    Implementation of above commands is produced by RIC DBaaS:
    https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/dbaas

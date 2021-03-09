@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.1.1] - 2021-03-09
+
+* Take DBAAS multi-channel publishing Redis modules into use.
+
 [2.1.0] - 2020-08-26
 
 * Add support for notifications

@@ -896,6 +896,10 @@ class SyncStorageAbc(ABC):
         events from subscriptions. The registered callback function will be called
         when an event is received.
 
+        It should be noted that subscribe_channel must be called before calling
+        start_event_listener to do at least one subscription before event loop
+        starts.
+
         Raises:
             SdlTypeError: If function's argument is of an inappropriate type.
             NotConnected: If SDL is not connected to the backend data storage.
@@ -914,6 +918,10 @@ class SyncStorageAbc(ABC):
         This function is called if SDL user decides to handle notifications in its own
         event loop. Calling this function after start_event_listener raises an exception.
         If there are no notifications, these returns None.
+
+        It should be noted that subscribe_channel must be called before calling of the
+        handle_events in an event loop. At least one subscription must be done before
+        events handling starts.
 
         Returns:
             Tuple: (channel: str, message: str)

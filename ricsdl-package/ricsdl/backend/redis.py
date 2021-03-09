@@ -205,7 +205,7 @@ class RedisBackend(DbBackendAbc):
             values = self.__redis.mget(db_keys)
             for idx, val in enumerate(values):
                 # return only key values, which has a value
-                if val:
+                if val is not None:
                     ret[keys[idx]] = val
             return ret
 
@@ -285,7 +285,7 @@ class RedisBackend(DbBackendAbc):
         channels_and_events_prepared = []
         channels_and_events_prepared, _ = self._prepare_channels(ns, channels_and_events)
         with _map_to_sdl_exception():
-            ret = self.__redis.execute_command("SETIEPUB", db_key, new_data, old_data,
+            ret = self.__redis.execute_command("SETIEMPUB", db_key, new_data, old_data,
                                                *channels_and_events_prepared)
             return ret == b"OK"
 
@@ -294,7 +294,7 @@ class RedisBackend(DbBackendAbc):
         db_key = self._add_key_ns_prefix(ns, key)
         channels_and_events_prepared, _ = self._prepare_channels(ns, channels_and_events)
         with _map_to_sdl_exception():
-            ret = self.__redis.execute_command("SETNXPUB", db_key, data,
+            ret = self.__redis.execute_command("SETNXMPUB", db_key, data,
                                                *channels_and_events_prepared)
             return ret == b"OK"
 
@@ -316,7 +316,7 @@ class RedisBackend(DbBackendAbc):
         db_key = self._add_key_ns_prefix(ns, key)
         channels_and_events_prepared, _ = self._prepare_channels(ns, channels_and_events)
         with _map_to_sdl_exception():
-            ret = self.__redis.execute_command("DELIEPUB", db_key, data,
+            ret = self.__redis.execute_command("DELIEMPUB", db_key, data,
                                                *channels_and_events_prepared)
             return bool(ret)
 
