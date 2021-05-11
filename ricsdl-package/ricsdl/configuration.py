@@ -34,7 +34,8 @@ class DbBackendType(Enum):
 class _Configuration():
     """This class implements Shared Data Layer (SDL) configurability."""
     Params = namedtuple('Params', ['db_host', 'db_port', 'db_sentinel_port',
-                                   'db_sentinel_master_name', 'db_type'])
+                                   'db_sentinel_master_name',
+                                   'db_cluster_addr_list', 'db_type'])
 
     def __init__(self, fake_db_backend):
         self.params = self._read_configuration(fake_db_backend)
@@ -46,6 +47,7 @@ class _Configuration():
                 "DB port": self.params.db_port,
                 "DB master sentinel": self.params.db_sentinel_master_name,
                 "DB sentinel port": self.params.db_sentinel_port,
+                "DB cluster address list": self.params.db_cluster_addr_list,
                 "DB type": self.params.db_type.name,
             }
         )
@@ -72,4 +74,5 @@ class _Configuration():
                                      db_port=os.getenv('DBAAS_SERVICE_PORT'),
                                      db_sentinel_port=os.getenv('DBAAS_SERVICE_SENTINEL_PORT'),
                                      db_sentinel_master_name=os.getenv('DBAAS_MASTER_NAME'),
+                                     db_cluster_addr_list=os.getenv('DBAAS_CLUSTER_ADDR_LIST'),
                                      db_type=backend_type)

@@ -53,6 +53,7 @@ def fake_dict_backend_fixture(request):
                                              db_port=None,
                                              db_sentinel_port=None,
                                              db_sentinel_master_name=None,
+                                             db_cluster_addr_list=None,
                                              db_type=DbBackendType.FAKE_DICT)
     request.cls.configuration.get_params.return_value = mock_conf_params
     request.cls.db = ricsdl.backend.get_backend_instance(request.cls.configuration)
@@ -329,6 +330,7 @@ def fake_dict_backend_lock_fixture(request):
                                              db_port=None,
                                              db_sentinel_port=None,
                                              db_sentinel_master_name=None,
+                                             db_cluster_addr_list=None,
                                              db_type=DbBackendType.FAKE_DICT)
     request.cls.configuration.get_params.return_value = mock_conf_params
     request.cls.lock = ricsdl.backend.get_backend_lock_instance(request.cls.configuration,

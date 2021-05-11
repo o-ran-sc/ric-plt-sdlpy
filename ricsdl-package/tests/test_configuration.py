@@ -26,10 +26,11 @@ from ricsdl.configuration import DbBackendType
 
 @pytest.fixture()
 def config_fixture(request, monkeypatch):
-    monkeypatch.setenv('DBAAS_SERVICE_HOST', '10.20.30.40')
+    monkeypatch.setenv('DBAAS_SERVICE_HOST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt')
     monkeypatch.setenv('DBAAS_SERVICE_PORT', '10000')
     monkeypatch.setenv('DBAAS_SERVICE_SENTINEL_PORT', '11000')
     monkeypatch.setenv('DBAAS_MASTER_NAME', 'my-master')
+    monkeypatch.setenv('DBAAS_CLUSTER_ADDR_LIST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt')
     request.cls.config = _Configuration(fake_db_backend=None)
 
 
@@ -39,14 +40,17 @@ def fake_db_config_fixture(request, monkeypatch):
     monkeypatch.delenv('DBAAS_SERVICE_PORT', raising=False)
     monkeypatch.delenv('DBAAS_SERVICE_SENTINEL_PORT', raising=False)
     monkeypatch.delenv('DBAAS_MASTER_NAME', raising=False)
+    monkeypatch.delenv('DBAAS_CLUSTER_ADDR_LIST', raising=False)
     request.cls.config = _Configuration(fake_db_backend='dict')
 
 
 class TestConfiguration:
     def test_get_params_function_returns_read_configuration(self, config_fixture):
-        expected_config = _Configuration.Params(db_host='10.20.30.40', db_port='10000',
+        expected_config = _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
+                                                db_port='10000',
                                                 db_sentinel_port='11000',
                                                 db_sentinel_master_name='my-master',
+                                                db_cluster_addr_list='service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt',
                                                 db_type=DbBackendType.REDIS)
         assert expected_config == self.config.get_params()
 
@@ -54,6 +58,7 @@ class TestConfiguration:
         expected_config = _Configuration.Params(db_host=None, db_port=None,
                                                 db_sentinel_port=None,
                                                 db_sentinel_master_name=None,
+                                                db_cluster_addr_list=None,
                                                 db_type=DbBackendType.FAKE_DICT)
         assert expected_config == self.config.get_params()
 
@@ -63,10 +68,11 @@ class TestConfiguration:
 
 
     def test_configuration_object_string_representation(self, config_fixture):
-        expected_config_info = {'DB host': '10.20.30.40',
+        expected_config_info = {'DB host': 'service-ricplt-dbaas-tcp-cluster-0.ricplt',
                                 'DB port': '10000',
                                 'DB master sentinel': 'my-master',
                                 'DB sentinel port': '11000',
+                                'DB cluster address list': 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt',
                                 'DB type': 'REDIS'}
         assert str(self.config) == str(expected_config_info)
 
@@ -75,5 +81,6 @@ class TestConfiguration:
                                 'DB port': None,
                                 'DB master sentinel': None,
                                 'DB sentinel port': None,
+                                'DB cluster address list': None,
                                 'DB type': 'FAKE_DICT'}
         assert str(self.config) == str(expected_config_info)
