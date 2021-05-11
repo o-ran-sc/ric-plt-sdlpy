@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[2.2.0] - 2021-05-11
+
+* Add DB backend instance selection based on namespace value to balance DB load.
+
 [2.1.1] - 2021-03-09
 
 * Take DBAAS multi-channel publishing Redis modules into use.
