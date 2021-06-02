@@ -22,7 +22,6 @@
 
 from os.path import dirname, abspath, join as path_join
 from setuptools import setup, find_packages
-from ricsdl import __version__
 
 SETUP_DIR = abspath(dirname(__file__))
 
@@ -39,7 +38,7 @@ def _long_descr():
 
 setup(
     name="ricsdl",
-    version=__version__,
+    version='2.3.0',
     packages=find_packages(exclude=["tests.*", "tests"]),
     author="Timo Tietavainen",
     author_email='timo.tietavainen@nokia.com',
@@ -59,7 +58,8 @@ setup(
     install_requires=[
         'setuptools',
         'redis',
-        'hiredis'
+        'hiredis',
+        'protobuf'
     ],
     long_description=_long_descr(),
     long_description_content_type="text/markdown",

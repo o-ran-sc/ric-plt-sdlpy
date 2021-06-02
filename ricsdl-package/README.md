@@ -43,6 +43,11 @@ notifications about data changes is referred to as "subscriber", while the SDL
 client modifying data and publishing notifications is referred to as
 "publisher".
 
+RNIB(Radio network information base)
+
+RNIB information is stored in SDL by E2mgr during the E2SETUP process.
+It is saved as protobuf serialized, see [nodeb-rnib](https://gerrit.o-ran-sc.org/r/admin/repos/ric-plt/nodeb-rnib) for .proto definition.
+
 Install
 -------
 
