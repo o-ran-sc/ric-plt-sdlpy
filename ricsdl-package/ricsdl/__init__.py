@@ -31,9 +31,6 @@ from .exceptions import (
 )
 
 
-__version__ = '2.2.0'
-
-
 __all__ = [
     'SyncStorage',
     'SyncLock',

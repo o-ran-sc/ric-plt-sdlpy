@@ -1,0 +1,4 @@
+[submodule "nodeb-rnib"]
+	path = nodeb-rnib
+	url = https://gerrit.o-ran-sc.org/r/ric-plt/nodeb-rnib
+	branch = cherry
