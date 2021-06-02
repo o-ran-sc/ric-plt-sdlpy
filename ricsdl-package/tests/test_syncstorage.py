@@ -40,6 +40,12 @@ def sync_storage_fixture(request):
     request.cls.group = 'some-group'
     request.cls.groupmembers = set([b'm1', b'm2'])
     request.cls.groupmember = b'm1'
+    request.cls.rnib_members = set(
+        [
+            b'\n\x08gnb_1234\x12\x10\n\x06abcdef\x12\x06abcdef\x18\x01',
+            b'\n\x08gnb_5678\x12\x10\n\x06ghijkl\x12\x06ghijkl\x18\x02'
+        ]
+    )
     request.cls.lock_name = 'some-lock-name'
     request.cls.lock_int_expiration = 10
     request.cls.lock_float_expiration = 1.1
@@ -313,6 +319,16 @@ class TestSyncStorage:
             self.storage.group_size(0xbad, self.group)
         with pytest.raises(SdlTypeError):
             self.storage.group_size(self.ns, 0xbad)
+    
+    def test_get_list_gnb_list_success(self):
+        self.mock_db_backend.get_members.return_value = self.rnib_members
+        ret = self.storage.get_list_gnb_ids()
+        self.mock_db_backend.get_members.assert_called_once()
+
+    def test_get_list_enb_list_success(self):
+        self.mock_db_backend.get_members.return_value = self.rnib_members
+        ret = self.storage.get_list_enb_ids()
+        self.mock_db_backend.get_members.assert_called_once()
 
     def test_set_and_publish_function_success(self):
         self.storage.set_and_publish(self.ns, self.channels_and_events, self.dm)

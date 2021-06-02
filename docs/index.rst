@@ -24,6 +24,7 @@ Welcome to O-RAN Shared Data Layer (SDL) in Python Documentation
    :caption: Contents:
 
    overview.rst
+   rnib.rst
    release-notes.rst
 
 * :ref:`genindex`

@@ -22,9 +22,8 @@
 """The module provides synchronous Shared Data Layer (SDL) interface."""
 from typing import (Callable, Dict, Set, List, Optional, Tuple, Union)
 from abc import ABC, abstractmethod
-from ricsdl.exceptions import (
-    RejectedByBackend
-)
+from ricsdl.exceptions import RejectedByBackend
+from ricsdl.entities.nb_identity_pb2 import NbIdentity
 
 __all__ = [
     'SyncStorageAbc',
@@ -642,6 +641,38 @@ class SyncStorageAbc(ABC):
         Returns:
             int: Number of members in a group.
 
+        Raises:
+            SdlTypeError: If function's argument is of an inappropriate type.
+            NotConnected: If SDL is not connected to the backend data storage.
+            RejectedByBackend: If backend data storage rejects the request.
+            BackendError: If the backend data storage fails to process the request.
+        """
+        pass
+
+    @abstractmethod
+    def get_list_gnb_ids(self) -> List[NbIdentity]:
+        """
+        Retrieves the list of gNodeb identity entities
+        gNodeb information is stored in SDL by E2Manager. Therefore, gNode information
+        is stored in SDL's `e2Manager` namespace as protobuf serialized.
+        Returns:
+            List: (NbIdentity)
+        Raises:
+            SdlTypeError: If function's argument is of an inappropriate type.
+            NotConnected: If SDL is not connected to the backend data storage.
+            RejectedByBackend: If backend data storage rejects the request.
+            BackendError: If the backend data storage fails to process the request.
+        """
+        pass
+
+    @abstractmethod
+    def get_list_enb_ids(self) -> List[NbIdentity]:
+        """
+        Retrieves the list of eNodeb identity entities
+        eNodeb information is stored in SDL by E2Manager. Therefore, eNode information
+        is stored in SDL's `e2Manager` namespace as protobuf serialized.
+        Returns:
+            List: (NbIdentity)
         Raises:
             SdlTypeError: If function's argument is of an inappropriate type.
             NotConnected: If SDL is not connected to the backend data storage.
