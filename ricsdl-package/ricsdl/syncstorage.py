@@ -23,10 +23,13 @@ import builtins
 import inspect
 from typing import (Any, Callable, Dict, Set, List, Optional, Tuple, Union)
 from ricsdl.configuration import _Configuration
+from ricsdl.constants import sdl_ns
 from ricsdl.syncstorage_abc import (SyncStorageAbc, SyncLockAbc)
 import ricsdl.backend
 from ricsdl.backend.dbbackend_abc import DbBackendAbc
 from ricsdl.exceptions import (SdlException, SdlTypeError)
+from ricsdl.entities.nb_identity_pb2 import NbIdentity
+from ricsdl.entities.nodeb_info_pb2 import Node
 
 
 def func_arg_checker(exception, start_arg_idx, **types):
@@ -206,6 +209,22 @@ class SyncStorage(SyncStorageAbc):
     @func_arg_checker(SdlTypeError, 1, ns=str, group=str)
     def group_size(self, ns: str, group: str) -> int:
         return self.__dbbackend.group_size(ns, group)
+
+    def _get_rnib_info(self, node_type: str) -> List[NbIdentity]:
+        nbid_strings: Set[bytes] = self.get_members(sdl_ns.E2_MANAGER, node_type)
+        ret = []
+        while nbid_strings:
+            nbid_string = nbid_strings.pop()
+            nbid = NbIdentity()
+            nbid.ParseFromString(nbid_string)
+            ret.append(nbid)
+        return ret
+
+    def get_list_gnb_ids(self) -> List[NbIdentity]:
+        return self._get_rnib_info(Node.Type.Name(Node.Type.GNB))
+
+    def get_list_enb_ids(self) -> List[NbIdentity]:
+        return self._get_rnib_info(Node.Type.Name(Node.Type.ENB))
 
     @func_arg_checker(SdlTypeError, 1, ns=str, channels_and_events=dict, data_map=dict)
     def set_and_publish(self, ns: str, channels_and_events: Dict[str, Union[str, List[str]]],
