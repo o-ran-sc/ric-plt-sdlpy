@@ -16,6 +16,23 @@
       "message": "This is a PR for nodeb-rnib related functions, could you review this PR?",
       "revId": "fb581a4114e20413e5675930191eb5834813b067",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1b77d21_a6062e1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-06-03T04:41:28Z",
+      "side": 1,
+      "message": "Hi,\nI think sdlpy is a wrong place to add this kind of RNIB specific functionality. Sdlpy is and it should be common \"library\" what offers common APIs to set,get and remove key-values from database, it should not offer any use-case specific interfaces, like rnib to anyone.\nInstead, should we have for example a new repository \"nodeb-rnib-py\" what provides APIs like \u0027get_list_gnb_ids\u0027 and \u0027get_list_enb_ids\u0027 and in implementation of these APIs we utilize sdlpy common APIs to read (rnib) key-values from database.\nThis is just my view, waiting others to comment too.\nRegards,\nTimo ",
+      "revId": "fb581a4114e20413e5675930191eb5834813b067",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
