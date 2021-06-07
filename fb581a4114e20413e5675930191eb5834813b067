@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a37de5c_2a077224",
+        "filename": ".gitmodules",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000108
+      },
+      "writtenOn": "2021-06-07T10:57:15Z",
+      "side": 1,
+      "message": "In it/dep we refer to master branch, which presume is the default.",
+      "range": {
+        "startLine": 4,
+        "startChar": 1,
+        "endLine": 4,
+        "endChar": 16
+      },
+      "revId": "fb581a4114e20413e5675930191eb5834813b067",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91ffec1f_e90bc126",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -31,6 +54,24 @@
       "writtenOn": "2021-06-03T04:41:28Z",
       "side": 1,
       "message": "Hi,\nI think sdlpy is a wrong place to add this kind of RNIB specific functionality. Sdlpy is and it should be common \"library\" what offers common APIs to set,get and remove key-values from database, it should not offer any use-case specific interfaces, like rnib to anyone.\nInstead, should we have for example a new repository \"nodeb-rnib-py\" what provides APIs like \u0027get_list_gnb_ids\u0027 and \u0027get_list_enb_ids\u0027 and in implementation of these APIs we utilize sdlpy common APIs to read (rnib) key-values from database.\nThis is just my view, waiting others to comment too.\nRegards,\nTimo ",
+      "revId": "fb581a4114e20413e5675930191eb5834813b067",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abfbd6b2_eeb7f0f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000108
+      },
+      "writtenOn": "2021-06-07T10:57:15Z",
+      "side": 1,
+      "message": "I agree this is essentially the python-equivalent of the go version in \"ric-plt/nodeb-rnib\". I suggest that we create a new repo for this. sdlpy/sdl/sdlgo we should keep as simple generic database wrapper. nodeb-rnib, however, is specifically about retrieving RAN configuration data. \n\nSo if you both agree to be the committer for a new repo \"nodeb-rnib-py\", I can file the repo request to TOC.",
+      "parentUuid": "b1b77d21_a6062e1b",
       "revId": "fb581a4114e20413e5675930191eb5834813b067",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
