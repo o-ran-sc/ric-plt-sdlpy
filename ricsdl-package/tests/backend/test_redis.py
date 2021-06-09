@@ -28,6 +28,7 @@ from ricsdl.configuration import _Configuration
 from ricsdl.configuration import DbBackendType
 import ricsdl.exceptions
 
+EVENT_SEPARATOR = "___"
 
 def get_test_sdl_standby_config():
     return _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
@@ -79,15 +80,17 @@ def redis_backend_common_fixture(request):
     request.cls.group_redis = '{some-ns},some-group'
     request.cls.groupmembers = set([b'm1', b'm2'])
     request.cls.groupmember = b'm1'
-    request.cls.channels = ['abs', 'gma']
-    request.cls.channels_and_events = {'abs': ['cbn'], 'gma': ['jkl']}
-    request.cls.channels_and_events_redis = ['{some-ns},abs', 'cbn', '{some-ns},gma', 'jkl']
+    request.cls.channels = ['ch1', 'ch2']
+    request.cls.channels_and_events = {'ch1': ['ev1'], 'ch2': ['ev2', 'ev3']}
+    request.cls.channels_and_events_redis = ['{some-ns},ch1', 'ev1',
+                                             '{some-ns},ch2', 'ev2' + EVENT_SEPARATOR + 'ev3']
 
     yield
 
 @pytest.fixture(params=['standalone', 'sentinel', 'sentinel_cluster'])
 def redis_backend_fixture(request, redis_backend_common_fixture):
     request.cls.configuration = Mock()
+    request.cls.configuration.get_event_separator.return_value = EVENT_SEPARATOR
     request.cls.test_backend_type = request.param
     if request.param == 'standalone':
         cfg = get_test_sdl_standby_config()
@@ -103,7 +106,8 @@ def redis_backend_fixture(request, redis_backend_common_fixture):
         request.cls.db = db
 
         mock_redis.assert_called_once_with(db=0, host=cfg.db_host, max_connections=20, port=cfg.db_port)
-        mock_pubsub.assert_called_once_with(request.cls.mock_redis.connection_pool, ignore_subscribe_messages=True)
+        mock_pubsub.assert_called_once_with(EVENT_SEPARATOR, request.cls.mock_redis.connection_pool,
+                                            ignore_subscribe_messages=True)
         assert request.cls.mock_redis.set_response_callback.call_count == 2
         assert request.cls.mock_redis.set_response_callback.call_args_list == [call('SETIE', ANY), call('DELIE', ANY)]
 
@@ -122,7 +126,8 @@ def redis_backend_fixture(request, redis_backend_common_fixture):
 
         mock_sentinel.assert_called_once_with([(cfg.db_host, cfg.db_sentinel_port)])
         mock_sentinel.master_for.called_once_with(cfg.db_sentinel_master_name)
-        mock_pubsub.assert_called_once_with(request.cls.mock_redis.connection_pool, ignore_subscribe_messages=True)
+        mock_pubsub.assert_called_once_with(EVENT_SEPARATOR, request.cls.mock_redis.connection_pool,
+                                            ignore_subscribe_messages=True)
         assert request.cls.mock_redis.set_response_callback.call_count == 2
         assert request.cls.mock_redis.set_response_callback.call_args_list == [call('SETIE', ANY), call('DELIE', ANY)]
 
@@ -150,8 +155,8 @@ def redis_backend_fixture(request, redis_backend_common_fixture):
         )
         assert mock_pubsub.call_count == 2
         mock_pubsub.assert_has_calls([
-            call(request.cls.mock_redis.connection_pool, ignore_subscribe_messages=True),
-            call(request.cls.mock_redis.connection_pool, ignore_subscribe_messages=True),
+            call(EVENT_SEPARATOR, request.cls.mock_redis.connection_pool, ignore_subscribe_messages=True),
+            call(EVENT_SEPARATOR, request.cls.mock_redis.connection_pool, ignore_subscribe_messages=True),
         ])
         assert request.cls.mock_redis.set_response_callback.call_count == 4
         assert request.cls.mock_redis.set_response_callback.call_args_list == [
@@ -543,7 +548,7 @@ class TestRedisBackend:
 
     def test_unsubscribe_channel_success(self):
         self.db.unsubscribe_channel(self.ns, [self.channels[0]])
-        self.mock_pubsub.unsubscribe.assert_called_with('{some-ns},abs')
+        self.mock_pubsub.unsubscribe.assert_called_with('{some-ns},ch1')
 
     def test_unsubscribe_channel_can_map_redis_exception_to_sdl_exeception(self):
         self.mock_pubsub.unsubscribe.side_effect = redis_exceptions.ResponseError('redis error!')
@@ -859,9 +864,9 @@ def test_system_error_exceptions_are_not_mapped_to_any_sdl_exception():
 class TestRedisClient:
     @classmethod
     def setup_class(cls):
-        cls.pubsub = ricsdl.backend.redis.PubSub(Mock())
-        cls.pubsub.channels = {b'{some-ns},abs': Mock()}
+        cls.pubsub = ricsdl.backend.redis.PubSub(EVENT_SEPARATOR, Mock())
+        cls.pubsub.channels = {b'{some-ns},ch1': Mock()}
 
     def test_handle_pubsub_message(self):
-        assert self.pubsub.handle_message([b'message', b'{some-ns},abs', b'cbn']) == ('abs', 'cbn')
-        self.pubsub.channels.get(b'{some-ns},abs').assert_called_once_with('abs', 'cbn')
+        assert self.pubsub.handle_message([b'message', b'{some-ns},ch1', b'cbn']) == ('ch1', 'cbn')
+        self.pubsub.channels.get(b'{some-ns},ch1').assert_called_once_with('ch1', 'cbn')

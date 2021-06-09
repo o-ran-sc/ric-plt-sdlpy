@@ -120,6 +120,7 @@ class SyncStorage(SyncStorageAbc):
     def __init__(self, fake_db_backend=None) -> None:
         super().__init__()
         self.__configuration = _Configuration(fake_db_backend)
+        self.event_separator = self.__configuration.get_event_separator()
         self.__dbbackend = ricsdl.backend.get_backend_instance(self.__configuration)
 
     def __del__(self):
@@ -265,7 +266,8 @@ class SyncStorage(SyncStorageAbc):
         self.__dbbackend.remove_all_and_publish(ns, channels_and_events)
 
     @func_arg_checker(SdlTypeError, 1, ns=str, cb=Callable, channels=(str, builtins.set))
-    def subscribe_channel(self, ns: str, cb: Callable[[str, str], None],
+    def subscribe_channel(self, ns: str,
+                          cb: Union[Callable[[str, str], None], Callable[[str, List[str]], None]],
                           channels: Union[str, Set[str]]) -> None:
         self._validate_callback(cb)
         channels = [channels] if isinstance(channels, str) else list(channels)
@@ -279,7 +281,7 @@ class SyncStorage(SyncStorageAbc):
     def start_event_listener(self) -> None:
         self.__dbbackend.start_event_listener()
 
-    def handle_events(self) -> Optional[Tuple[str, str]]:
+    def handle_events(self) -> Optional[Union[Tuple[str, str], Tuple[str, List[str]]]]:
         return self.__dbbackend.handle_events()
 
     @func_arg_checker(SdlTypeError, 1, ns=str, resource=str, expiration=(int, float))
@@ -302,8 +304,7 @@ class SyncStorage(SyncStorageAbc):
             if not isinstance(v, bytes):
                 raise SdlTypeError(r"Wrong dict value type: {}={}. Must be: bytes".format(v, type(v)))
 
-    @classmethod
-    def _validate_channels_events(cls, channels_and_events: Dict[Any, Any]):
+    def _validate_channels_events(self, channels_and_events: Dict[Any, Any]):
         for channel, events in channels_and_events.items():
             if not isinstance(channel, str):
                 raise SdlTypeError(r"Wrong channel type: {}={}. Must be: str".format(
@@ -316,6 +317,13 @@ class SyncStorage(SyncStorageAbc):
                     if not isinstance(event, str):
                         raise SdlTypeError(r"Wrong event type: {}={}. Must be: str".format(
                             events, type(events)))
+                    if self.event_separator in event:
+                        raise SdlTypeError(r"Events {} contains illegal substring (\"{}\")".format(
+                            events, self.event_separator))
+            else:
+                if self.event_separator in events:
+                    raise SdlTypeError(r"Events {} contains illegal substring (\"{}\")".format(
+                        events, self.event_separator))
 
     @classmethod
     def _validate_callback(cls, cb):

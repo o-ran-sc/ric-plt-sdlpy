@@ -62,6 +62,9 @@ class TestConfiguration:
                                                 db_type=DbBackendType.FAKE_DICT)
         assert expected_config == self.config.get_params()
 
+    def test_get_event_separator_function_return_expected_separator(self, config_fixture):
+        assert "___" == _Configuration.get_event_separator()
+
     def test_get_params_function_can_raise_exception_if_wrong_fake_db_type(self):
         with pytest.raises(ValueError, match=r"Configuration error"):
             _Configuration(fake_db_backend='bad value')

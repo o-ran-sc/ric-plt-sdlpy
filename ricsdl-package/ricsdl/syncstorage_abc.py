@@ -829,7 +829,8 @@ class SyncStorageAbc(ABC):
         pass
 
     @abstractmethod
-    def subscribe_channel(self, ns: str, cb: Callable[[str, str], None],
+    def subscribe_channel(self, ns: str,
+                          cb: Union[Callable[[str, str], None], Callable[[str, List[str]], None]],
                           channels: Union[str, Set[str]]) -> None:
         """
         Subscribes the client to the specified channels.
@@ -840,10 +841,10 @@ class SyncStorageAbc(ABC):
         the events.
 
         When subscribing for a channel, a callback function is given as a parameter.
-        Whenever a notification is received from a channel, this callback is called
-        with channel and notifications as parameter. A call to subscribe_channel function
-        returns immediately, callbacks will be called synchronously from a dedicated
-        thread.
+        Whenever single notification or many notifications are received from a channel,
+        this callback is called with channel and notifications as parameter. A call to
+        subscribe_channel function returns immediately, callbacks will be called
+        synchronously from a dedicated thread.
 
         It is possible to subscribe to different channels using different callbacks. In
         this case simply use subscribe_channel function separately for each channel.
@@ -855,7 +856,7 @@ class SyncStorageAbc(ABC):
 
         Args:
             ns: Namespace under which this operation is targeted.
-            cb: A function that is called when an event on channel is received.
+            cb: A function that is called when events on channel are received.
             channels: One channel or multiple channels to be subscribed.
 
         Returns:
@@ -909,10 +910,10 @@ class SyncStorageAbc(ABC):
         pass
 
     @abstractmethod
-    def handle_events(self) -> Optional[Tuple[str, str]]:
+    def handle_events(self) -> Optional[Union[Tuple[str, str], Tuple[str, List[str]]]]:
         """
         handle_events is a non-blocking function that returns a tuple containing channel
-        name and message received from an event. The registered callback function will
+        name and message(s) received from an event. The registered callback function will
         still be called when an event is received.
 
         This function is called if SDL user decides to handle notifications in its own
@@ -924,7 +925,8 @@ class SyncStorageAbc(ABC):
         events handling starts.
 
         Returns:
-            Tuple: (channel: str, message: str)
+            Tuple: (channel: str, message: str) or
+            Tuple: (channel: str, messages: list of str)
 
         Raises:
             SdlTypeError: If function's argument is of an inappropriate type.

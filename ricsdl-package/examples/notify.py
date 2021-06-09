@@ -57,13 +57,14 @@ import time
 
 from ricsdl.syncstorage import SyncStorage
 from ricsdl.exceptions import RejectedByBackend, NotConnected, BackendError
+from typing import (Union, List)
 
 # There are two available methods for applications to handle notifications:
 #   - EVENT_LISTENER (true):
 #     - User calls sdl.start_event_listener() which will create an SDL managed
 #       event loop for handling messages.
 #   - EVENT_LISTENER (false):
-#     - User need to call sdl.handle_messages() which will return the message
+#     - User need to call sdl.handle_events() which will return the message
 #
 # Note: In both cases, the given callback function will be executed.
 EVENT_LISTENER = True
@@ -114,8 +115,9 @@ last_cb_message = ""
 stop_thread = False
 
 
-def cb(channel: str, message: str):
-    """An example of function that will be called when an event is received.
+def cb(channel: str, message: Union[str, List[str]]):
+    """An example of function that will be called when a single event or list of
+    events are received.
 
     This function sets last_cb_channel and last_cb_message as channel and
     message respectively. This also unlocks the global lock variable.
@@ -159,6 +161,13 @@ else:
 _try_func_callback_return(
     lambda: mysdl.set_and_publish(MY_NS, {MY_CHANNEL: "SET PUBLISH"}, {'my_key': b'my_value'}))
 assert last_cb_channel == MY_CHANNEL and last_cb_message == "SET PUBLISH"
+
+# Sets a value 'my_value' for a key 'my_key' under given namespace. Note that value
+# type must be bytes and multiple key values can be set in one set function call.
+# Function publishes two events into one channel.
+_try_func_callback_return(
+    lambda: mysdl.set_and_publish(MY_NS, {MY_CHANNEL: ["SET PUBLISH1", "SET PUBLISH2"]}, {'my_key': b'my_value'}))
+assert last_cb_channel == MY_CHANNEL and last_cb_message == ["SET PUBLISH1", "SET PUBLISH2"]
 
 # Sets a value 'my_value2' for a key 'my_key' under given namespace only if the old value is
 # 'my_value'.

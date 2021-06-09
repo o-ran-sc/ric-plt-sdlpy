@@ -76,3 +76,7 @@ class _Configuration():
                                      db_sentinel_master_name=os.getenv('DBAAS_MASTER_NAME'),
                                      db_cluster_addr_list=os.getenv('DBAAS_CLUSTER_ADDR_LIST'),
                                      db_type=backend_type)
+
+    @classmethod
+    def get_event_separator(cls):
+        return "___"
