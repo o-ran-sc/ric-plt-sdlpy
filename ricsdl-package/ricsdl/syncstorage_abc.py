@@ -829,8 +829,7 @@ class SyncStorageAbc(ABC):
         pass
 
     @abstractmethod
-    def subscribe_channel(self, ns: str,
-                          cb: Union[Callable[[str, str], None], Callable[[str, List[str]], None]],
+    def subscribe_channel(self, ns: str, cb: Callable[[str, List[str]], None],
                           channels: Union[str, Set[str]]) -> None:
         """
         Subscribes the client to the specified channels.
@@ -842,8 +841,8 @@ class SyncStorageAbc(ABC):
 
         When subscribing for a channel, a callback function is given as a parameter.
         Whenever single notification or many notifications are received from a channel,
-        this callback is called with channel and notifications as parameter. A call to
-        subscribe_channel function returns immediately, callbacks will be called
+        this callback is called with channel and notification list as parameter. A call
+        to subscribe_channel function returns immediately, callbacks will be called
         synchronously from a dedicated thread.
 
         It is possible to subscribe to different channels using different callbacks. In
@@ -856,7 +855,7 @@ class SyncStorageAbc(ABC):
 
         Args:
             ns: Namespace under which this operation is targeted.
-            cb: A function that is called when events on channel are received.
+            cb: A function that is called when event(s) on channel is received.
             channels: One channel or multiple channels to be subscribed.
 
         Returns:
@@ -910,7 +909,7 @@ class SyncStorageAbc(ABC):
         pass
 
     @abstractmethod
-    def handle_events(self) -> Optional[Union[Tuple[str, str], Tuple[str, List[str]]]]:
+    def handle_events(self) -> Optional[Tuple[str, List[str]]]:
         """
         handle_events is a non-blocking function that returns a tuple containing channel
         name and message(s) received from an event. The registered callback function will
@@ -925,8 +924,7 @@ class SyncStorageAbc(ABC):
         events handling starts.
 
         Returns:
-            Tuple: (channel: str, message: str) or
-            Tuple: (channel: str, messages: list of str)
+            Tuple: (channel: str, message(s): list of str)
 
         Raises:
             SdlTypeError: If function's argument is of an inappropriate type.

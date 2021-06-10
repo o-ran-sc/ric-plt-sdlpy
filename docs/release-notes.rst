@@ -33,6 +33,12 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[3.0.0] - 2021-06-10
+
+* Simplify v2.3.0 notification callback and handle_events API to return received
+  event(s) only as a list type. Earlier single event was returned as a string type.
+  Notification callback and handle_events API changes are not backward compatible.
+
 [2.3.0] - 2021-06-09
 
 * Pack all the events in a channel to one DB notification to be in line with SDL Golang.

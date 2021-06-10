@@ -115,9 +115,8 @@ last_cb_message = ""
 stop_thread = False
 
 
-def cb(channel: str, message: Union[str, List[str]]):
-    """An example of function that will be called when a single event or list of
-    events are received.
+def cb(channel: str, message: List[str]):
+    """An example of function that will be called when an event list is received.
 
     This function sets last_cb_channel and last_cb_message as channel and
     message respectively. This also unlocks the global lock variable.
@@ -160,7 +159,7 @@ else:
 # type must be bytes and multiple key values can be set in one set function call.
 _try_func_callback_return(
     lambda: mysdl.set_and_publish(MY_NS, {MY_CHANNEL: "SET PUBLISH"}, {'my_key': b'my_value'}))
-assert last_cb_channel == MY_CHANNEL and last_cb_message == "SET PUBLISH"
+assert last_cb_channel == MY_CHANNEL and last_cb_message[0] == "SET PUBLISH"
 
 # Sets a value 'my_value' for a key 'my_key' under given namespace. Note that value
 # type must be bytes and multiple key values can be set in one set function call.
@@ -174,7 +173,7 @@ assert last_cb_channel == MY_CHANNEL and last_cb_message == ["SET PUBLISH1", "SE
 was_set = _try_func_callback_return(lambda: mysdl.set_if_and_publish(
     MY_NS, {MY_CHANNEL: "SET IF PUBLISH"}, 'my_key', b'my_value', b'my_value2'))
 assert was_set is True
-assert last_cb_channel == MY_CHANNEL and last_cb_message == "SET IF PUBLISH"
+assert last_cb_channel == MY_CHANNEL and last_cb_message[0] == "SET IF PUBLISH"
 # Try again. This time value 'my_value2' won't be set, because the key has already 'my_value2'
 # value. Callback function will not be called here.
 was_set = _try_func_return(lambda: mysdl.set_if_and_publish(MY_NS, {MY_CHANNEL: "SET IF PUBLISH"},
@@ -186,7 +185,7 @@ assert was_set is False
 was_set = _try_func_callback_return(lambda: mysdl.set_if_not_exists_and_publish(
     MY_NS, {MY_CHANNEL: "SET IF NOT PUBLISH"}, 'my_key2', b'my_value'))
 assert was_set is True
-assert last_cb_channel == MY_CHANNEL and last_cb_message == "SET IF NOT PUBLISH"
+assert last_cb_channel == MY_CHANNEL and last_cb_message[0] == "SET IF NOT PUBLISH"
 # Try again. This time the key 'my_key2' already exists. Callback function will not be called here.
 was_set = _try_func_return(lambda: mysdl.set_if_not_exists_and_publish(
     MY_NS, {MY_CHANNEL: "SET IF NOT PUBLISH"}, 'my_key2', b'my_value'))
@@ -197,13 +196,13 @@ _try_func_callback_return(
     lambda: mysdl.remove_and_publish(MY_NS, {MY_CHANNEL: "REMOVE PUBLISH"}, 'my_key'))
 my_ret_dict = _try_func_return(lambda: mysdl.get(MY_NS, 'my_key'))
 assert my_ret_dict == {}
-assert last_cb_channel == MY_CHANNEL and last_cb_message == "REMOVE PUBLISH"
+assert last_cb_channel == MY_CHANNEL and last_cb_message[0] == "REMOVE PUBLISH"
 
 # Removes a key 'my_key' under given namespace only if the old value is 'my_value'.
 was_removed = _try_func_callback_return(lambda: mysdl.remove_if_and_publish(
     MY_NS, {MY_CHANNEL: "REMOVE IF PUBLISH"}, 'my_key2', b'my_value'))
 assert was_removed is True
-assert last_cb_channel == MY_CHANNEL and last_cb_message == "REMOVE IF PUBLISH"
+assert last_cb_channel == MY_CHANNEL and last_cb_message[0] == "REMOVE IF PUBLISH"
 # Try again to remove not anymore existing key 'my_key'. Callback function will not be called here.
 was_removed = _try_func_return(lambda: mysdl.remove_if_and_publish(
     MY_NS, {MY_CHANNEL: "REMOVE IF PUBLISH"}, 'my_key2', b'my_value'))
@@ -218,7 +217,7 @@ _try_func_callback_return(
     lambda: mysdl.remove_all_and_publish(MY_NS, {MY_CHANNEL: "REMOVE ALL PUBLISH"}))
 my_ret_dict = _try_func_return(lambda: mysdl.get(MY_NS, {'my_key'}))
 assert my_ret_dict == {}
-assert last_cb_channel == MY_CHANNEL and last_cb_message == "REMOVE ALL PUBLISH"
+assert last_cb_channel == MY_CHANNEL and last_cb_message[0] == "REMOVE ALL PUBLISH"
 
 stop_thread = True
 mysdl.close()

@@ -161,13 +161,12 @@ class DbBackendAbc(ABC):
         pass
 
     @abstractmethod
-    def subscribe_channel(self, ns: str,
-                          cb: Union[Callable[[str, str], None], Callable[[str, List[str]], None]],
+    def subscribe_channel(self, ns: str, cb: Callable[[str, List[str]], None],
                           channels: List[str]) -> None:
         """
         This takes a callback function and one or many channels to be subscribed.
         When an event is received for the given channel, the given callback function
-        shall be called with channel and notifications as parameter.
+        shall be called with channel and notification(s) as parameter.
         """
         pass
 
@@ -185,7 +184,7 @@ class DbBackendAbc(ABC):
         pass
 
     @abstractmethod
-    def handle_events(self) -> Optional[Union[Tuple[str, str], Tuple[str, List[str]]]]:
+    def handle_events(self) -> Optional[Tuple[str, List[str]]]:
         """
         handle_events is a non-blocking function that returns a tuple containing channel
         name and message(s) received from notification.

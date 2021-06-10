@@ -117,9 +117,8 @@ class PubSub(redis.client.PubSub):
                 message_channel = self._strip_ns_from_bin_key('', message['channel'])
                 message_data = message['data'].decode('utf-8')
                 messages = message_data.split(self.event_separator)
-                notification = messages[0] if len(messages) == 1 else messages
-                handler(message_channel, notification)
-                return message_channel, notification
+                handler(message_channel, messages)
+                return message_channel, messages
         elif message_type != 'pong':
             # this is a subscribe/unsubscribe message. ignore if we don't
             # want them
@@ -330,8 +329,7 @@ class RedisBackend(DbBackendAbc):
                 *channels_and_events_prepared,
             )
 
-    def subscribe_channel(self, ns: str,
-                          cb: Union[Callable[[str, str], None], Callable[[str, List[str]], None]],
+    def subscribe_channel(self, ns: str, cb: Callable[[str, List[str]], None],
                           channels: List[str]) -> None:
         channels = self.__add_keys_ns_prefix(ns, channels)
         for channel in channels:
@@ -357,7 +355,7 @@ class RedisBackend(DbBackendAbc):
                 redis_ctx.pubsub_thread = redis_ctx.redis_pubsub.run_in_thread(sleep_time=0.001, daemon=True)
             redis_ctx.run_in_thread = True
 
-    def handle_events(self) -> Optional[Union[Tuple[str, str], Tuple[str, List[str]]]]:
+    def handle_events(self) -> Optional[Tuple[str, List[str]]]:
         if self.next_client_event >= len(self.clients):
             self.next_client_event = 0
         redis_ctx = self.clients[self.next_client_event]

@@ -868,5 +868,5 @@ class TestRedisClient:
         cls.pubsub.channels = {b'{some-ns},ch1': Mock()}
 
     def test_handle_pubsub_message(self):
-        assert self.pubsub.handle_message([b'message', b'{some-ns},ch1', b'cbn']) == ('ch1', 'cbn')
-        self.pubsub.channels.get(b'{some-ns},ch1').assert_called_once_with('ch1', 'cbn')
+        assert self.pubsub.handle_message([b'message', b'{some-ns},ch1', b'cbn']) == ('ch1', ['cbn'])
+        self.pubsub.channels.get(b'{some-ns},ch1').assert_called_once_with('ch1', ['cbn'])

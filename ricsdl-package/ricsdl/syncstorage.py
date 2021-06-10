@@ -266,8 +266,7 @@ class SyncStorage(SyncStorageAbc):
         self.__dbbackend.remove_all_and_publish(ns, channels_and_events)
 
     @func_arg_checker(SdlTypeError, 1, ns=str, cb=Callable, channels=(str, builtins.set))
-    def subscribe_channel(self, ns: str,
-                          cb: Union[Callable[[str, str], None], Callable[[str, List[str]], None]],
+    def subscribe_channel(self, ns: str, cb: Callable[[str, List[str]], None],
                           channels: Union[str, Set[str]]) -> None:
         self._validate_callback(cb)
         channels = [channels] if isinstance(channels, str) else list(channels)
@@ -281,7 +280,7 @@ class SyncStorage(SyncStorageAbc):
     def start_event_listener(self) -> None:
         self.__dbbackend.start_event_listener()
 
-    def handle_events(self) -> Optional[Union[Tuple[str, str], Tuple[str, List[str]]]]:
+    def handle_events(self) -> Optional[Tuple[str, List[str]]]:
         return self.__dbbackend.handle_events()
 
     @func_arg_checker(SdlTypeError, 1, ns=str, resource=str, expiration=(int, float))
