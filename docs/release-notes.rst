@@ -33,6 +33,11 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[3.0.1] - 2021-11-18
+
+* Add specific package versions for required dependencies: redis==3.5.3 and
+* hiredis==2.0.0. Package ricsdl is not compatible with new redis 4.x.y versions.
+
 [3.0.0] - 2021-06-10
 
 * Simplify v2.3.0 notification callback and handle_events API to return received
