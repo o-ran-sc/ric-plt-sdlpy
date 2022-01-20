@@ -33,6 +33,11 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[3.0.2] - 2022-01-20
+
+* Pump Redis client version to 4.1.1 and replace deprecated Redis client '_compat'
+  module with 'utils' module.
+
 [3.0.1] - 2021-11-18
 
 * Add specific package versions for required dependencies: redis==3.5.3 and
