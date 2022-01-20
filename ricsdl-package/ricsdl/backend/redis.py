@@ -28,7 +28,7 @@ import redis
 from redis import Redis
 from redis.sentinel import Sentinel
 from redis.lock import Lock
-from redis._compat import nativestr
+from redis.utils import str_if_bytes
 from redis import exceptions as redis_exceptions
 from ricsdl.configuration import _Configuration
 from ricsdl.exceptions import (
@@ -69,7 +69,7 @@ class PubSub(redis.client.PubSub):
 
         Adapted from: https://github.com/andymccurdy/redis-py/blob/master/redis/client.py
         """
-        message_type = nativestr(response[0])
+        message_type = str_if_bytes(response[0])
         if message_type == 'pmessage':
             message = {
                 'type': message_type,
@@ -392,7 +392,7 @@ class RedisBackend(DbBackendAbc):
             new_sentinel = Sentinel([sentinel_node])
             new_redis = new_sentinel.master_for(master_name)
 
-        new_redis.set_response_callback('SETIE', lambda r: r and nativestr(r) == 'OK' or False)
+        new_redis.set_response_callback('SETIE', lambda r: r and str_if_bytes(r) == 'OK' or False)
         new_redis.set_response_callback('DELIE', lambda r: r and int(r) == 1 or False)
 
         redis_pubsub = PubSub(self.event_separator, new_redis.connection_pool, ignore_subscribe_messages=True)
