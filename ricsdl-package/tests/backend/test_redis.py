@@ -1,5 +1,5 @@
 # Copyright (c) 2019 AT&T Intellectual Property.
-# Copyright (c) 2018-2019 Nokia.
+# Copyright (c) 2018-2022 Nokia.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,26 +32,26 @@ EVENT_SEPARATOR = "___"
 
 def get_test_sdl_standby_config():
     return _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
-                                 db_port=6379,
-                                 db_sentinel_port=None,
-                                 db_sentinel_master_name=None,
-                                 db_cluster_addr_list=None,
+                                 db_ports=['6379'],
+                                 db_sentinel_ports=[],
+                                 db_sentinel_master_names=[],
+                                 db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt'],
                                  db_type=DbBackendType.REDIS)
 
 def get_test_sdl_sentinel_config():
     return _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
-                                 db_port=6379,
-                                 db_sentinel_port=26379,
-                                 db_sentinel_master_name='dbaasmaster',
-                                 db_cluster_addr_list=None,
+                                 db_ports=['6379'],
+                                 db_sentinel_ports=['26379'],
+                                 db_sentinel_master_names=['dbaasmaster'],
+                                 db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt'],
                                  db_type=DbBackendType.REDIS)
 
 def get_test_sdl_sentinel_cluster_config():
     return _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
-                                 db_port=6379,
-                                 db_sentinel_port=26379,
-                                 db_sentinel_master_name='dbaasmaster',
-                                 db_cluster_addr_list='service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt',
+                                 db_ports=['6379','6380'],
+                                 db_sentinel_ports=['26379','26380'],
+                                 db_sentinel_master_names=['dbaasmaster-cluster-0','dbaasmaster-cluster-1'],
+                                 db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt','service-ricplt-dbaas-tcp-cluster-1.ricplt'],
                                  db_type=DbBackendType.REDIS)
 
 @pytest.fixture()
@@ -105,7 +105,7 @@ def redis_backend_fixture(request, redis_backend_common_fixture):
             request.cls.mock_pubsub_thread.is_alive.return_value = False
         request.cls.db = db
 
-        mock_redis.assert_called_once_with(db=0, host=cfg.db_host, max_connections=20, port=cfg.db_port)
+        mock_redis.assert_called_once_with(db=0, host=cfg.db_host, max_connections=20, port=cfg.db_ports[0])
         mock_pubsub.assert_called_once_with(EVENT_SEPARATOR, request.cls.mock_redis.connection_pool,
                                             ignore_subscribe_messages=True)
         assert request.cls.mock_redis.set_response_callback.call_count == 2
@@ -124,8 +124,8 @@ def redis_backend_fixture(request, redis_backend_common_fixture):
             request.cls.mock_pubsub_thread.is_alive.return_value = False
         request.cls.db = db
 
-        mock_sentinel.assert_called_once_with([(cfg.db_host, cfg.db_sentinel_port)])
-        mock_sentinel.master_for.called_once_with(cfg.db_sentinel_master_name)
+        mock_sentinel.assert_called_once_with([(cfg.db_host, cfg.db_sentinel_ports[0])])
+        mock_sentinel.master_for.called_once_with(cfg.db_sentinel_master_names[0])
         mock_pubsub.assert_called_once_with(EVENT_SEPARATOR, request.cls.mock_redis.connection_pool,
                                             ignore_subscribe_messages=True)
         assert request.cls.mock_redis.set_response_callback.call_count == 2
@@ -146,12 +146,12 @@ def redis_backend_fixture(request, redis_backend_common_fixture):
 
         assert mock_sentinel.call_count == 2
         mock_sentinel.assert_has_calls([
-            call([('service-ricplt-dbaas-tcp-cluster-0.ricplt', cfg.db_sentinel_port)]),
-            call([('service-ricplt-dbaas-tcp-cluster-1.ricplt', cfg.db_sentinel_port)]),
+            call([('service-ricplt-dbaas-tcp-cluster-0.ricplt', '26379')]),
+            call([('service-ricplt-dbaas-tcp-cluster-1.ricplt', '26380')]),
         ], any_order=True)
         assert mock_sentinel.return_value.master_for.call_count == 2
         mock_sentinel.return_value.master_for.assert_has_calls(
-            [call(cfg.db_sentinel_master_name), call(cfg.db_sentinel_master_name)], any_order=True,
+            [call('dbaasmaster-cluster-0'), call('dbaasmaster-cluster-1')], any_order=True,
         )
         assert mock_pubsub.call_count == 2
         mock_pubsub.assert_has_calls([
@@ -728,10 +728,10 @@ def redis_backend_lock_fixture(request, mock_redis_lock):
 
     request.cls.configuration = Mock()
     mock_conf_params = _Configuration.Params(db_host=None,
-                                             db_port=None,
-                                             db_sentinel_port=None,
-                                             db_sentinel_master_name=None,
-                                             db_cluster_addr_list=None,
+                                             db_ports=None,
+                                             db_sentinel_ports=None,
+                                             db_sentinel_master_names=None,
+                                             db_cluster_addrs=None,
                                              db_type=DbBackendType.REDIS)
     request.cls.configuration.get_params.return_value = mock_conf_params
 

@@ -1,5 +1,5 @@
 # Copyright (c) 2019 AT&T Intellectual Property.
-# Copyright (c) 2018-2019 Nokia.
+# Copyright (c) 2018-2022 Nokia.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +27,11 @@ from ricsdl.configuration import DbBackendType
 @pytest.fixture()
 def config_fixture(request, monkeypatch):
     monkeypatch.setenv('DBAAS_SERVICE_HOST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt')
-    monkeypatch.setenv('DBAAS_SERVICE_PORT', '10000')
-    monkeypatch.setenv('DBAAS_SERVICE_SENTINEL_PORT', '11000')
-    monkeypatch.setenv('DBAAS_MASTER_NAME', 'my-master')
+    monkeypatch.setenv('DBAAS_SERVICE_PORT', '10000,10001')
+    monkeypatch.setenv('DBAAS_SERVICE_SENTINEL_PORT', '11000,11001')
+    monkeypatch.setenv('DBAAS_MASTER_NAME', 'my-master-0,my-master-1')
     monkeypatch.setenv('DBAAS_CLUSTER_ADDR_LIST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt')
     request.cls.config = _Configuration(fake_db_backend=None)
-
 
 @pytest.fixture
 def fake_db_config_fixture(request, monkeypatch):
@@ -43,22 +42,21 @@ def fake_db_config_fixture(request, monkeypatch):
     monkeypatch.delenv('DBAAS_CLUSTER_ADDR_LIST', raising=False)
     request.cls.config = _Configuration(fake_db_backend='dict')
 
-
 class TestConfiguration:
     def test_get_params_function_returns_read_configuration(self, config_fixture):
         expected_config = _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
-                                                db_port='10000',
-                                                db_sentinel_port='11000',
-                                                db_sentinel_master_name='my-master',
-                                                db_cluster_addr_list='service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt',
+                                                db_ports=['10000','10001'],
+                                                db_sentinel_ports=['11000','11001'],
+                                                db_sentinel_master_names=['my-master-0','my-master-1'],
+                                                db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt','service-ricplt-dbaas-tcp-cluster-1.ricplt'],
                                                 db_type=DbBackendType.REDIS)
         assert expected_config == self.config.get_params()
 
     def test_get_params_function_can_return_fake_db_configuration(self, fake_db_config_fixture):
-        expected_config = _Configuration.Params(db_host=None, db_port=None,
-                                                db_sentinel_port=None,
-                                                db_sentinel_master_name=None,
-                                                db_cluster_addr_list=None,
+        expected_config = _Configuration.Params(db_host='', db_ports=[],
+                                                db_sentinel_ports=[],
+                                                db_sentinel_master_names=[],
+                                                db_cluster_addrs=[],
                                                 db_type=DbBackendType.FAKE_DICT)
         assert expected_config == self.config.get_params()
 
@@ -72,18 +70,61 @@ class TestConfiguration:
 
     def test_configuration_object_string_representation(self, config_fixture):
         expected_config_info = {'DB host': 'service-ricplt-dbaas-tcp-cluster-0.ricplt',
-                                'DB port': '10000',
-                                'DB master sentinel': 'my-master',
-                                'DB sentinel port': '11000',
-                                'DB cluster address list': 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt',
+                                'DB ports': ['10000','10001'],
+                                'DB master sentinels': ['my-master-0','my-master-1'],
+                                'DB sentinel ports': ['11000','11001'],
+                                'DB cluster addresses': ['service-ricplt-dbaas-tcp-cluster-0.ricplt','service-ricplt-dbaas-tcp-cluster-1.ricplt'],
                                 'DB type': 'REDIS'}
         assert str(self.config) == str(expected_config_info)
 
     def test_configuration_object_string_representation_if_fake_db(self, fake_db_config_fixture):
-        expected_config_info = {'DB host': None,
-                                'DB port': None,
-                                'DB master sentinel': None,
-                                'DB sentinel port': None,
-                                'DB cluster address list': None,
+        expected_config_info = {'DB host': '',
+                                'DB ports': [],
+                                'DB master sentinels': [],
+                                'DB sentinel ports': [],
+                                'DB cluster addresses': [],
                                 'DB type': 'FAKE_DICT'}
         assert str(self.config) == str(expected_config_info)
+
+    def test_complete_configuration_if_less_ports_than_addresses(self, monkeypatch):
+        monkeypatch.setenv('DBAAS_SERVICE_HOST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt')
+        monkeypatch.setenv('DBAAS_SERVICE_PORT', '10000')
+        monkeypatch.setenv('DBAAS_CLUSTER_ADDR_LIST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt')
+
+        expected_config = _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
+                                                db_ports=['10000','10000'],
+                                                db_sentinel_ports=[],
+                                                db_sentinel_master_names=[],
+                                                db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt','service-ricplt-dbaas-tcp-cluster-1.ricplt'],
+                                                db_type=DbBackendType.REDIS)
+        assert expected_config == _Configuration(fake_db_backend=None).get_params()
+
+    def test_complete_configuration_if_less_sentinel_ports_than_addresses(self, monkeypatch):
+        monkeypatch.setenv('DBAAS_SERVICE_HOST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt')
+        monkeypatch.setenv('DBAAS_SERVICE_PORT', '10000,10001')
+        monkeypatch.setenv('DBAAS_SERVICE_SENTINEL_PORT', '11000')
+        monkeypatch.setenv('DBAAS_MASTER_NAME', 'my-master-0,my-master-1')
+        monkeypatch.setenv('DBAAS_CLUSTER_ADDR_LIST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt')
+
+        expected_config = _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
+                                                db_ports=['10000','10001'],
+                                                db_sentinel_ports=['11000','11000'],
+                                                db_sentinel_master_names=['my-master-0','my-master-1'],
+                                                db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt','service-ricplt-dbaas-tcp-cluster-1.ricplt'],
+                                                db_type=DbBackendType.REDIS)
+        assert expected_config == _Configuration(fake_db_backend=None).get_params()
+
+    def test_complete_configuration_if_less_sentinel_names_than_addresses(self, monkeypatch):
+        monkeypatch.setenv('DBAAS_SERVICE_HOST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt')
+        monkeypatch.setenv('DBAAS_SERVICE_PORT', '10000,10001')
+        monkeypatch.setenv('DBAAS_SERVICE_SENTINEL_PORT', '11000,11001')
+        monkeypatch.setenv('DBAAS_MASTER_NAME', 'my-master-0')
+        monkeypatch.setenv('DBAAS_CLUSTER_ADDR_LIST', 'service-ricplt-dbaas-tcp-cluster-0.ricplt,service-ricplt-dbaas-tcp-cluster-1.ricplt')
+
+        expected_config = _Configuration.Params(db_host='service-ricplt-dbaas-tcp-cluster-0.ricplt',
+                                                db_ports=['10000','10001'],
+                                                db_sentinel_ports=['11000','11001'],
+                                                db_sentinel_master_names=['my-master-0','my-master-0'],
+                                                db_cluster_addrs=['service-ricplt-dbaas-tcp-cluster-0.ricplt','service-ricplt-dbaas-tcp-cluster-1.ricplt'],
+                                                db_type=DbBackendType.REDIS)
+        assert expected_config == _Configuration(fake_db_backend=None).get_params()

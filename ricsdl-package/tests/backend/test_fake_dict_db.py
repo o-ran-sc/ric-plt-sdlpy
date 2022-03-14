@@ -1,5 +1,5 @@
 # Copyright (c) 2019 AT&T Intellectual Property.
-# Copyright (c) 2018-2019 Nokia.
+# Copyright (c) 2018-2022 Nokia.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,10 +50,10 @@ def fake_dict_backend_fixture(request):
 
     request.cls.configuration = Mock()
     mock_conf_params = _Configuration.Params(db_host=None,
-                                             db_port=None,
-                                             db_sentinel_port=None,
-                                             db_sentinel_master_name=None,
-                                             db_cluster_addr_list=None,
+                                             db_ports=None,
+                                             db_sentinel_ports=None,
+                                             db_sentinel_master_names=None,
+                                             db_cluster_addrs=None,
                                              db_type=DbBackendType.FAKE_DICT)
     request.cls.configuration.get_params.return_value = mock_conf_params
     request.cls.db = ricsdl.backend.get_backend_instance(request.cls.configuration)
@@ -327,10 +327,10 @@ def fake_dict_backend_lock_fixture(request):
 
     request.cls.configuration = Mock()
     mock_conf_params = _Configuration.Params(db_host=None,
-                                             db_port=None,
-                                             db_sentinel_port=None,
-                                             db_sentinel_master_name=None,
-                                             db_cluster_addr_list=None,
+                                             db_ports=None,
+                                             db_sentinel_ports=None,
+                                             db_sentinel_master_names=None,
+                                             db_cluster_addrs=None,
                                              db_type=DbBackendType.FAKE_DICT)
     request.cls.configuration.get_params.return_value = mock_conf_params
     request.cls.lock = ricsdl.backend.get_backend_lock_instance(request.cls.configuration,

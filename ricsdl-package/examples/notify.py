@@ -38,13 +38,16 @@ Execution of  these examples requires:
  * Following environment variables are needed to set to the pod/container where the application
    utilizing SDL is going to be run.
      DBAAS_SERVICE_HOST = [DB service address]
-     DBAAS_SERVICE_PORT= [DB service port]
-     DBAAS_MASTER_NAME = [DB name]. Needed to set only if Redis sentinel is used to provide high
-     availability for Redis DB solution.
-     DBAAS_SERVICE_SENTINEL_PORT = [Redis sentinel port number]. Needed to set only if Redis
-     sentinel is in use.
-     DBASS_CLUSTER_ADDR_LIST = [list of DB service addresses]. Is set only if more than one
-     Redis sentinel groups are in use.
+     DBAAS_SERVICE_PORT= [Comma separated list of DB service ports]. Only one port supported in
+     RIC deployments, Nokia SEP deployments can have multiple ports.
+     DBAAS_MASTER_NAME = [Comma separated list of DB names]. Needed to set only if Redis
+     sentinel is used to provide high availability for Redis DB solution. Only one DB name
+     supported in RIC deployments, Nokia SEP deployments can have multiple DB names.
+     DBAAS_SERVICE_SENTINEL_PORT = [Comma separated list of Redis sentinel port number]. Needed
+     to set only if Redis sentinel is in use. Only one port supported in RIC deployments, Nokia
+     SEP deployments can have multiple ports.
+     DBASS_CLUSTER_ADDR_LIST = [Comma separated list of DB service addresses]. Is set only if
+     more than one Redis sentinel groups are in use. Only in use in Nokia SEP deployments.
    In official RIC deployments four first environment variables are defined in Helm configMaps
    of the DBaaS and these configurations can be loaded automatically as environment variables
    into application pods via `envFrom dbaas-appconfig` statement in an application Helm Charts.

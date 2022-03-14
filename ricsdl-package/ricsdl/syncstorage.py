@@ -1,5 +1,5 @@
 # Copyright (c) 2019 AT&T Intellectual Property.
-# Copyright (c) 2018-2019 Nokia.
+# Copyright (c) 2018-2022 Nokia.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -119,6 +119,7 @@ class SyncStorage(SyncStorageAbc):
     """
     def __init__(self, fake_db_backend=None) -> None:
         super().__init__()
+        self.__dbbackend = None
         self.__configuration = _Configuration(fake_db_backend)
         self.event_separator = self.__configuration.get_event_separator()
         self.__dbbackend = ricsdl.backend.get_backend_instance(self.__configuration)
@@ -141,7 +142,8 @@ class SyncStorage(SyncStorageAbc):
             return False
 
     def close(self):
-        self.__dbbackend.close()
+        if self.__dbbackend:
+            self.__dbbackend.close()
 
     @func_arg_checker(SdlTypeError, 1, ns=str, data_map=dict)
     def set(self, ns: str, data_map: Dict[str, bytes]) -> None:

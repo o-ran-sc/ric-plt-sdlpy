@@ -1,6 +1,6 @@
 ..
 ..  Copyright (c) 2019 AT&T Intellectual Property.
-..  Copyright (c) 2019 Nokia.
+..  Copyright (c) 2019-2022 Nokia.
 ..
 ..  Licensed under the Creative Commons Attribution 4.0 International
 ..  Public License (the "License"); you may not use this file except
@@ -32,6 +32,10 @@ This document provides the release notes of the ricsdl library.
 
 Version history
 ---------------
+
+[3.1.0] - 2022-03-14
+
+* Enable redis/sentinel port and sentinel master name configuration
 
 [3.0.2] - 2022-01-20
 

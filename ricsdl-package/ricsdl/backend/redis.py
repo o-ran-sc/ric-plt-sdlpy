@@ -1,5 +1,5 @@
 # Copyright (c) 2019 AT&T Intellectual Property.
-# Copyright (c) 2018-2019 Nokia.
+# Copyright (c) 2018-2022 Nokia.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -370,25 +370,22 @@ class RedisBackend(DbBackendAbc):
     def __create_redis_clients(self, config):
         clients = list()
         cfg_params = config.get_params()
-        if cfg_params.db_cluster_addr_list is None:
-            clients.append(self.__create_legacy_redis_client(cfg_params))
-        else:
-            for addr in cfg_params.db_cluster_addr_list.split(","):
-                client = self.__create_redis_client(cfg_params, addr)
-                clients.append(client)
+        for i, addr in enumerate(cfg_params.db_cluster_addrs):
+            port = cfg_params.db_ports[i] if i < len(cfg_params.db_ports) else ""
+            sport = cfg_params.db_sentinel_ports[i] if i < len(cfg_params.db_sentinel_ports) else ""
+            name = cfg_params.db_sentinel_master_names[i] if i < len(cfg_params.db_sentinel_master_names) else ""
+
+            client = self.__create_redis_client(addr, port, sport, name)
+            clients.append(client)
         return clients
 
-    def __create_legacy_redis_client(self, cfg_params):
-        return self.__create_redis_client(cfg_params, cfg_params.db_host)
-
-    def __create_redis_client(self, cfg_params, addr):
+    def __create_redis_client(self, addr, port, sentinel_port, master_name):
         new_sentinel = None
         new_redis = None
-        if cfg_params.db_sentinel_port is None:
-            new_redis = Redis(host=addr, port=cfg_params.db_port, db=0, max_connections=20)
+        if len(sentinel_port) == 0:
+            new_redis = Redis(host=addr, port=port, db=0, max_connections=20)
         else:
-            sentinel_node = (addr, cfg_params.db_sentinel_port)
-            master_name = cfg_params.db_sentinel_master_name
+            sentinel_node = (addr, sentinel_port)
             new_sentinel = Sentinel([sentinel_node])
             new_redis = new_sentinel.master_for(master_name)
 
