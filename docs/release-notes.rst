@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[3.1.1] - 2022-06-27
+
+* Bump Python version to 3.8.
+
 [3.1.0] - 2022-03-14
 
 * Enable redis/sentinel port and sentinel master name configuration
