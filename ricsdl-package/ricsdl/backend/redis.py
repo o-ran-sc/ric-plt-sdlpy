@@ -45,13 +45,13 @@ def _map_to_sdl_exception():
     """Translates known redis exceptions into SDL exceptions."""
     try:
         yield
-    except(redis_exceptions.ResponseError) as exc:
+    except redis_exceptions.ResponseError as exc:
         raise RejectedByBackend("SDL backend rejected the request: {}".
                                 format(str(exc))) from exc
-    except(redis_exceptions.ConnectionError, redis_exceptions.TimeoutError) as exc:
+    except (redis_exceptions.ConnectionError, redis_exceptions.TimeoutError) as exc:
         raise NotConnected("SDL not connected to backend: {}".
                            format(str(exc))) from exc
-    except(redis_exceptions.RedisError) as exc:
+    except redis_exceptions.RedisError as exc:
         raise BackendError("SDL backend failed to process the request: {}".
                            format(str(exc))) from exc
 
@@ -588,5 +588,5 @@ class RedisBackendLock(DbBackendLockAbc):
                     return 'locked'
                 return 'locked by someone else'
             return 'unlocked'
-        except(redis_exceptions.RedisError) as exc:
+        except redis_exceptions.RedisError as exc:
             return f'Error: {str(exc)}'
