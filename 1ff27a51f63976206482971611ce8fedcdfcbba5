@@ -16,6 +16,24 @@
       "message": "I don\u0027t have +2/merge rights for O-RAN",
       "revId": "1ff27a51f63976206482971611ce8fedcdfcbba5",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3687632_9d49c2d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000125
+      },
+      "writtenOn": "2023-05-17T13:32:59Z",
+      "side": 1,
+      "message": "Thanks matt, right, we are not committers for this $project. So will request one of the project committers to merge this.",
+      "parentUuid": "9c12598e_fd691c4c",
+      "revId": "1ff27a51f63976206482971611ce8fedcdfcbba5",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
