@@ -1,0 +1,9 @@
+Verified+1: Thoralf Czichy <thoralf.czichy@nokia.com>
+Code-Review+2: Thoralf Czichy <thoralf.czichy@nokia.com>
+Code-Review+1: Matthew Watkins <mwatkins@linuxfoundation.org>
+Code-Review+1: Anil Belur <abelur@linuxfoundation.org>
+Submitted-by: Thoralf Czichy <thoralf.czichy@nokia.com>
+Submitted-at: Thu, 18 May 2023 05:49:40 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/ric-plt/sdlpy/+/11120
+Project: ric-plt/sdlpy
+Branch: refs/heads/master
