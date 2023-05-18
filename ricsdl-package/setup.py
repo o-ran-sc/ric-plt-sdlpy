@@ -58,7 +58,7 @@ setup(
     keywords="RIC SDL",
     install_requires=[
         'setuptools',
-        'redis==4.1.1',
+        'redis==4.3.6',
         'hiredis==2.0.0'
     ],
     long_description=_long_descr(),
