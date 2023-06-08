@@ -33,6 +33,10 @@ This document provides the release notes of the ricsdl library.
 Version history
 ---------------
 
+[3.1.3] - 2023-06-08
+
+* Bump Python version to 3.9.
+
 [3.1.2] - 2022-12-12
 
 * correcting whitespaces
