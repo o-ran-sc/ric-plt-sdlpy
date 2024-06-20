@@ -1,0 +1,10 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Code-Review+2: Matthew Watkins <mwatkins@linuxfoundation.org>
+Code-Review+2: Timo Tietavainen <timo.tietavainen@nokia.com>
+Verified+1: John Keeney <john.keeney@est.tech>
+Code-Review+1: John Keeney <john.keeney@est.tech>
+Submitted-by: John Keeney <john.keeney@est.tech>
+Submitted-at: Thu, 20 Jun 2024 17:41:10 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/ric-plt/sdlpy/+/12837
+Project: ric-plt/sdlpy
+Branch: refs/heads/master
